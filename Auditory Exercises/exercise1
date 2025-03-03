@@ -1,0 +1,64 @@
+Да се напише програма која ќе споредува два датуми (ден, месец, година) и ќе ја пресмета разликата во денови од едниот до другиот датум. 
+Пресметките да се реализираат во посебни функции. За датумот да се дефинира посебна структура date.
+
+#include <iostream>
+using namespace std;
+
+struct Date {
+    int day;
+    int month;
+    int year;
+
+    int compareDates (Date other) {
+        // 1 - ako prviot e pogolem od vtoriot, -1 ako vtoriot e pogolem od prviot i 0 ako se isti
+        if (year > other.year) {
+            return 1;
+        }
+        else if ( year < other.year) {
+            return -1;
+        }
+        else {
+            if (month > other.month) {
+                return 1;
+            }
+            else if (month < other.month) {
+                return -1;
+            }
+            else {
+                if (day > other.day) {
+                    return 1;
+                }
+                else if (day < other.day) {
+                    return -1;
+                }
+                else {
+                    return 0;
+                }
+            }
+        }
+    }
+
+    int calculateDiff(Date other) {
+        int diff = (year - other.year) * 365 + (month - other.month) * 30 + (day - other.day);
+        return abs(diff);
+    }
+};
+void read (Date &date) {
+    cin>>date.day>>date.month>>date.year;
+}
+int main () {
+    Date d1;
+    Date d2;
+    read(d1);
+    read(d2);
+    // compareDates(d1,d2);
+    if (d1.compareDates (d2) == 1) {
+        cout<<d1.calculateDiff(d2)<<endl;
+    }
+    else if (d1.compareDates (d2) == -1) {
+        cout<<d2.calculateDiff(d1)<<endl;
+    }
+    else {
+        cout<<"Datumite se isti"<<endl;
+    }
+}
