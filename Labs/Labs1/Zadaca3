@@ -1,0 +1,64 @@
+Да се креира структура Item во која што ќе се чуваат податоци за еден производ од продавница. За производот ќе се чуваат информации за име и цена на производот.
+Потоа, да се креира структура ShoppingCart во која што ќе  се чуваат податоци за id на кошничката и сите производи кои се дел од таа кошничка за купување.
+На почетокот се внесува број N што озналува колку кошнички ќе се читаат од влез.
+
+Да се направат функциите:
+
+void printAveragePriceOfLowestItems(...):
+која што ќе ги земе производите со најмала цена од секоја кошничка, ќе ја пресмета нивната средна вредност и ќе ја испечати.
+
+
+void printHighestPricedItem(...):
+кoja што за секоја кошничка ќе го испечати името на производот со најголема цена и id-то на кошничката од кој што доаѓа тој производ.
+
+#include <iostream>
+using namespace std;
+
+struct Item {
+    char name[20];
+    int price;
+};
+struct ShoppingCart {
+    int id;
+    Item items[50];
+    int n;
+};
+void read(Item *items, int n) {
+    for (int i = 0; i < n; i++) {
+        cin >> items[i].name >> items[i].price;
+    }
+}
+void readCarts(ShoppingCart *shoppingCarts, Item *items, int t) {
+    for (int i = 0; i < t; i++) {
+        cin >> shoppingCarts[i].id >> shoppingCarts[i].n;
+        for(int j = 0; j < shoppingCarts[i].n; j++) {
+            cin>>shoppingCarts[i].items[j].name >> shoppingCarts[i].items[j].price;
+        }
+    }
+}
+void printAveragePriceOfLowestItems(ShoppingCart *shoppingCarts, int num) {
+    float average;
+    int counter = 0;
+    for (int i = 0; i < num; i++) {
+        int lowest = INT_MAX;
+        for (int j = 0; j < shoppingCarts[i].n; j++) {
+            if (shoppingCarts[i].items[j].price < lowest) {
+                lowest = shoppingCarts[i].items[j].price;
+            }
+        }
+        average += lowest;
+        counter++;
+    }
+    cout << average/counter << endl;
+}
+void printHighestPricedItem();
+int main() {
+    // int n;
+    // cin >> n;
+    int t;
+    cin >> t;
+    Item items[20];
+    ShoppingCart shoppingCarts[20];
+    readCarts(shoppingCarts, items, t);
+    printAveragePriceOfLowestItems(shoppingCarts, t);
+}
