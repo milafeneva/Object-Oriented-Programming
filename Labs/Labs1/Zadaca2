@@ -1,0 +1,73 @@
+Да се креира структура Student во која се чуваат податоци за еден студент. За студентот се чуваат информации за името на студентот(низа од карактери), број на индекс на студентот, број на курсеви кои ги слуша, низа од кодови на курсевите кои ги слуша.
+
+Потоа, да се креира структура Course во која се чуваат податоци за името на курсот (низа од карактери), код на курсот(цел број) и број на студенти кои го слушаат.
+
+Да се направи функција: 
+
+int get_most_popular_course(struct course courses[], int num_courses)
+кoja што го враќа кодот на најпопуларниот курс.
+
+#include <iostream>
+#include <random>
+using namespace std;
+
+struct Student {
+    char name[20];
+    int id;
+    int brojKursevi;
+    int kodoviNaKursevi[20];
+
+};
+struct Course {
+    char imeNaKurs[20];
+    int kodNaKurs;
+    int brojStudenti;
+
+};
+void readKurs(Course *courses, int n) {
+    for (int i = 0; i < n; i++) {
+        cin >> courses[i].imeNaKurs >> courses[i].kodNaKurs >> courses[i].brojStudenti;
+    }
+}
+void readStudent(Student *student, Course *courses, int t) {
+    for (int i = 0; i < t; i++) {
+        cin >> student[i].name >> student[i].id >> student[i].brojKursevi;
+        for (int j = 0; j<student[i].brojKursevi; j++) {
+            cin >> student[i].kodoviNaKursevi[j];
+            for (int k = 0; k < t; k++) {
+                if (student[i].kodoviNaKursevi[j] == courses[k].kodNaKurs) {
+                    courses[k].brojStudenti++;
+                }
+            }
+        }
+    }
+
+}
+int getMostPopularCourses(Course course[], int num_courses) {
+    // int max=0;
+    // int index = 0;
+    Course maxCourse = course[0];
+    for(int i=0;i<num_courses;i++) {
+        if(course[i].brojStudenti>maxCourse.brojStudenti) {
+            maxCourse = course[i];
+        }
+
+        // if(course[i].brojStudenti > max) {
+        //     max = course[i].brojStudenti;
+        //     index = i;
+        // }
+    }
+    return maxCourse.kodNaKurs;
+    // return course[index].kodNaKurs;
+}
+int main() {
+    int n;
+    int t;
+    cin >> n;
+    cin >> t;
+    Course courses[n+1];
+    Student students[t+1];
+    readKurs(courses, n);
+    readStudent(students,courses, t);
+    cout<<getMostPopularCourses(courses,n);
+}
