@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <string.h>
+using namespace std;
+
+
+enum Type {
+    employee,
+    manager,
+    owner
+};
+class Employee {
+private:
+    char name[20];
+    int salary;
+    Type type;
+public:
+    Employee(char *_name = "Mila", int _salary = 30000, Type _type = employee) {
+        strcpy(name, _name);
+        salary = _salary;
+        type = _type;
+    }
+    ~Employee() {}
+    void print () {
+        cout << "Name: " << name << endl;
+        cout << "Salary: " << salary << endl;
+        cout << "Type: ";
+        switch (type) {
+            case employee:
+                cout << "Basic" << endl;
+                break;
+            case manager:
+                cout << "Manager" << endl;
+                break;
+            default:
+                cout << "Owner";
+        }
+    }
+    void setName (char _name[50]) {
+        strcpy(name, _name);
+    }
+    void setSalary (int _salary) {
+        salary = _salary;
+    }
+    void setType (Type _type) {
+        type = _type;
+    }
+};
+
+int main() {
+    int n;
+    cin >> n;
+    Employee employees[50];
+    char name[50];
+    int salary;
+    int type;
+    for (int i = 0; i < n; i++) {
+        cin >> name >> salary >> type;
+        employees[i] = Employee(name, salary, (Type)type);
+        // employees[i].setName(name);
+        // employees[i].setSalary(salary);
+        // employees[i].setType((Type)type);
+
+    }
+    for (int i = 0; i < n; i++) {
+        employees[i].print();
+    }
+
+}
+
