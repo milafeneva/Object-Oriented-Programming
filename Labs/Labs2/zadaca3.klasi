@@ -1,0 +1,119 @@
+Да се дефинира класа Country во која ќе се чуваат информации за:
+
+    name(низа од максимум 100 карактери) име на државата
+
+    capital(низа од максимум 100 карактери) главен град
+
+    area(децимален број) - површина во илјада km2
+
+    population(децимален број) - популација во милиони.
+
+Сите променливи внатре во класата треба да бидат приватни. Соодветно во рамките на класата да се дефинираат:
+
+    конструктор (без и со параметри)
+
+    деструктор
+
+    set методи
+
+    get методи
+
+Да се дефинираат следните методи во класата:
+
+    display() која што ќе ги печати информациите за сметката во следниот формат:
+
+Country: Guyana
+
+Capital: Georgetown
+
+Area: 214
+
+Population: 0.8
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class Country {
+private:
+    char name[100];
+    char capital[100];
+    float area;
+    float population;
+    public:
+    Country() {
+        strcpy(name, "");
+        strcpy(capital, "");
+        area = 0;
+        population = 0;
+    }
+    Country(char *_name, char *_capital, float _area, float _population) {
+        strcpy(name, _name);
+        strcpy(capital, _capital);
+        area = _area;
+        population = _population;
+    }
+    ~Country() {}
+    void setName(char *_name) {
+        strcpy(name, _name);
+    }
+    void setCapital(char *_capital) {
+        strcpy(capital, _capital);
+    }
+    void setArea(float _area) {
+        area = _area;
+    }
+    void setPopulation(float _population) {
+        population = _population;
+    }
+    char *getName() {
+        return name;
+    }
+    char *getCapital() {
+        return capital;
+    }
+    float getArea() {
+        return area;
+    }
+    float getPopulation() {
+        return population;
+    }
+    void display() {
+        cout << "Name: " << name << endl;
+        cout << "Capital: " << capital << endl;
+        cout << "Area: " << area << endl;
+        cout << "Population: " << population << endl;
+    }
+};
+void sortCountries(Country *countries, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (countries[j].getArea() > countries[j + 1].getArea()) {
+                swap(countries[j], countries[j + 1]);
+            }
+        }
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+    Country countries[n];
+    for (int i = 0; i < n; i++) {
+        char name[100], capital[100];
+        float area, _population;
+        cin.ignore();
+        cin.getline(name, 100);
+        cin.getline(capital, 100);
+        cin >> area >> _population;
+        countries[i] = Country(name, capital, area, _population);
+    }
+    sortCountries(countries, n);
+    for (int i = 0; i < n; i++) {
+        countries[i].display();
+        cout << endl;
+    }
+}
+Надвор од класата:
+
+    sortCountries(Country *countries, int n) која што ќе ги сортира државите растечки по нивната површина.
