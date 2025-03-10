@@ -9,3 +9,59 @@
 void printCars(...)
 
 која што ќе ги земе двете коли кои имаат најмала коњска сила, и од нив две, ќе ја испечати колата што има поголем вртежен момент.
+
+#include <iostream>
+using namespace std;
+
+struct Engine {
+    int horsePower;
+    int torque;
+};
+struct Car {
+    char name[20];
+    int year;
+    int n;
+    Engine engine;
+
+};
+void readCar(Car *car, int n) {
+    for (int i = 0; i < n; i++) {
+        cin >> car[i].name >> car[i].year >> car[i].engine.horsePower >> car[i].engine.torque;
+    }
+}
+void printCars(Car *car, int n) {
+    if (n<2) return;
+    int min1 = INT_MAX;
+    int min2 = INT_MAX;
+    int indexMin1 = -1;
+    int indexMin2 = -1;
+    for (int i = 0; i < n; i++) {
+        if (car[i].engine.horsePower < min1) {
+            min2 = min1;
+            indexMin2 = indexMin1;
+            min1 = car[i].engine.horsePower;
+            indexMin1 = i;
+        } else if (car[i].engine.horsePower < min2) {
+            min2 = car[i].engine.horsePower;
+            indexMin2 = i;
+        }
+    }
+    if (indexMin1 == -1 || indexMin2 == -1) {
+        return;
+    }
+    int resultIndex = 0;
+    if (car[indexMin1].engine.torque >= car[indexMin2].engine.torque) {
+        resultIndex = indexMin1;
+    } else {
+        resultIndex = indexMin2;
+    }
+    cout << car[resultIndex].name << " " << car[resultIndex].year << " " <<
+        car[resultIndex].engine.horsePower << " " << car[resultIndex].engine.torque << endl;
+}
+int main() {
+    int n;
+    cin >> n;
+    Car car[n];
+    readCar(car, n);
+    printCars(car, n);
+}
