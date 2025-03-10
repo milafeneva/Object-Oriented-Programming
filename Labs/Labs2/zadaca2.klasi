@@ -12,3 +12,46 @@
 Од стандарден влез се внесуваат име, презиме, број на дрес и поени за сите три натпревари за еден кошаркар.
 
 На стандарден излез се печатат информациите за кошаркарот.
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class BasketballPlayer {
+private:
+    char name[20];
+    char surname[20];
+    int num;
+    int poeni1;
+    int poeni2;
+    int poeni3;
+public:
+    BasketballPlayer(char *_name, char *_surname, int _num, int _poeni1, int _poeni2, int _poeni3) {
+        strcpy(name, _name);
+        strcpy(surname, _surname);
+        num = _num;
+        poeni1 = _poeni1;
+        poeni2 = _poeni2;
+        poeni3 = _poeni3;
+    }
+    void print() {
+        double average = (poeni1 + poeni2 + poeni3) / 3.0;
+        cout << "Player: " << name << " " << surname << " with number " << num;
+        cout << " has " << average << " points on average.";
+    }
+
+};
+
+int main() {
+    char name[20];
+    char surname[20];
+    int num;
+    int poeni1;
+    int poeni2;
+    int poeni3;
+    // cin.getline(name, 20);
+    // cin.getline(surname, 20);
+    cin >>name >> surname >>  num >> poeni1 >> poeni2 >> poeni3;
+    BasketballPlayer player(name, surname, num, poeni1, poeni2, poeni3);
+    player.print();
+    return 0;
+}
