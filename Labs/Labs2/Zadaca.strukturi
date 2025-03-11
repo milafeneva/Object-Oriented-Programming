@@ -65,3 +65,51 @@ int main() {
     readCar(car, n);
     printCars(car, n);
 }
+
+
+#include <iostream>
+using namespace std;
+struct Engine {
+    int horsepower;
+    int torque;
+};
+struct Car {
+    char name[50];
+    int founding_year;
+    Engine engine;
+};
+void printCars(Car *cars, int n) {
+    int min1=0,min2=1;
+    if (cars[min1].engine.horsepower > cars[min2].engine.horsepower) {
+        int temp;
+        temp=min1;
+        min1=min2;
+        min2=temp;
+    }
+    for (int i = 2; i < n; ++i) {
+        if (cars[i].engine.horsepower < cars[min1].engine.horsepower) {
+            min2 = min1;
+            min1 = i;
+        } else if (cars[i].engine.horsepower < cars[min2].engine.horsepower) {
+            min2 = i;
+        }
+    }
+    if (cars[min1].engine.torque < cars[min2].engine.torque) {
+        cout<<cars[min2].name<<endl;
+    }else {
+        cout<<cars[min1].name<<endl;
+    }
+}
+int main() {
+    int n;
+    cin>>n;
+    int horsepower;
+    int torque;
+    char name[50];
+    int founding_year;
+    Car cars[n];
+    for (int i=0;i<n;i++) {
+        cin>>cars[i].name>>cars[i].founding_year>>cars[i].engine.horsepower>>cars[i].engine.torque;
+    }
+    printCars(cars, n);
+}
