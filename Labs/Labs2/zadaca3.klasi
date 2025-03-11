@@ -29,13 +29,19 @@ Capital: Georgetown
 Area: 214
 
 Population: 0.8
+Надвор од класата:
+
+    sortCountries(Country *countries, int n) која што ќе ги сортира државите растечки по нивната површина.
 
 #include <iostream>
-#include <string.h>
+#include <cstring>
+#include <cctype>
+#include <cmath>
+#include <fstream>
 using namespace std;
 
 class Country {
-private:
+    private:
     char name[100];
     char capital[100];
     float area;
@@ -87,33 +93,55 @@ private:
 };
 void sortCountries(Country *countries, int n) {
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (countries[j].getArea() > countries[j + 1].getArea()) {
-                swap(countries[j], countries[j + 1]);
+        for (int j=0;j<n-1-i;j++) {
+            if (countries[j].getArea()>countries[j+1].getArea()) { //rastechki
+                Country temp = countries[j];
+                countries[j] = countries[j+1];
+                countries[j+1] = temp;
             }
         }
     }
+    for (int i = 0; i < n; i++) {
+        countries[i].display();
+    }
 }
-
 int main() {
     int n;
     cin >> n;
-    Country countries[n];
-    for (int i = 0; i < n; i++) {
-        char name[100], capital[100];
-        float area, _population;
-        cin.ignore();
-        cin.getline(name, 100);
-        cin.getline(capital, 100);
-        cin >> area >> _population;
-        countries[i] = Country(name, capital, area, _population);
-    }
-    sortCountries(countries, n);
-    for (int i = 0; i < n; i++) {
-        countries[i].display();
-        cout << endl;
-    }
-}
-Надвор од класата:
+    Country countries[100];
 
-    sortCountries(Country *countries, int n) која што ќе ги сортира државите растечки по нивната површина.
+    char name[100];
+    char capital[100];
+    float area;
+    float population;
+
+    for (int i = 0; i < n-1; i++)  {
+        cin>>name;
+        cin >> capital;
+        cin >> area;
+        cin>>population;
+
+        // testing constructor with arguments
+        countries[i] = Country(name, capital, area, population);
+
+    }
+
+
+    // testing set methods and display for last element
+    cin>>name;
+    cin >> capital;
+    cin >> area;
+    cin>>population;
+    countries[n-1].setName(name);
+    countries[n-1].setCapital(capital);
+    countries[n-1].setArea(area);
+    countries[n-1].setPopulation(population);
+
+    cout<<"-->Testing set methods and display()"<<endl;
+    countries[n-1].display();
+    cout<<endl;
+
+    cout<<"-->Testing sortCountries()"<<endl;
+    sortCountries(countries,n);
+    return 0;
+}
