@@ -1,71 +1,60 @@
 #include <iostream>
-#include <cstring>
+#include <string.h>
 using namespace std;
 
 class Film {
+private:
     char name[100];
     float rating;
-    float revenue;
-
-public:
+    int revenue;
+    public:
     Film() {
-        strcpy(name, " ");
+        strcpy(name, "");
         rating = 0;
         revenue = 0;
     }
-
-    Film(char* nameInput, float ratingInput, float revenueInput) {
-        strcpy(name, nameInput);
-        rating = ratingInput;
-        revenue = revenueInput;
+    Film(char *_name, float _rating, int _revenue) {
+        strcpy(name, _name);
+        rating = _rating;
+        revenue = _revenue;
     }
-
-    char* getName() {
+    void setName(char *_name) {
+        strcpy(name, _name);
+    }
+    void setRating(float _rating) {
+        rating = _rating;
+    }
+    void setRevenue(int _revenue) {
+        revenue = _revenue;
+    }
+    char *getName() {
         return name;
     }
-
-    void setName(char* nameInput) {
-        strcpy(name, nameInput);
-    }
-
     float getRating() {
         return rating;
     }
-
-    void setRating(float ratingInput) {
-        rating = ratingInput;
-    }
-
-    float getRevenue() {
+    int getRevenue() {
         return revenue;
     }
-
-    void setRevenue(float revenueInput) {
-        revenue = revenueInput;
-    }
-
     void display() {
-        cout << "Name of film: " << name << "\n";
-        cout << "Rating: " << rating << "\n";
-        cout << "Revenue: " << revenue << "\n";
+        cout << "Name: " << name << endl;
+        cout << "Rating: " << rating << endl;
+        cout << "Revenue: " << revenue << endl;
     }
-
-    ~Film() { }
+    ~Film() {}
 };
-
-void printMostPopularFilm(Film* films, int n) {
-    int idx = -1;
-    float max_revenue = -1;
-
-    for(int i = 0; i < n; i++) {
-        if(films[i].getRevenue() > max_revenue) {
-            max_revenue = films[i].getRevenue();
-            idx = i;
+void printMostPopularFilm(Film *films, int n) {
+    int max = 0;
+    int index = -1;
+    for (int i = 0; i < n; i++) {
+        if (films[i].getRevenue() > max) {
+            max = films[i].getRevenue();
+            index = i;
         }
     }
-
-    films[idx].display();
+    films[index].display();
 }
+
 // DO NOT CHANGE THE MAIN FUNCTION
 int main() {
     int n;
@@ -103,3 +92,4 @@ int main() {
     printMostPopularFilm(films , n);
     return 0;
 }
+
