@@ -1,0 +1,6 @@
+Write a Datum class that stores day, month, and year (integers).
+Write a Vraboten class that stores the employee's name (no more than 20 characters), salary, and date of birth (an object of the Datum class).
+Write two functions that take an array of employees and the size of the array as arguments.
+One function returns the employee with the highest salary, and the other function returns the youngest employee in the company.
+In the main program, it is necessary to print the data for the youngest and highest paid employee on the screen. 
+Printing the employee should be implemented with a special function print() within the Vraboten class.
