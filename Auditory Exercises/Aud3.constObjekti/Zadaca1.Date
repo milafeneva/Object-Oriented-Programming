@@ -1,0 +1,105 @@
+Да се дефинира класа Momche која содржи информации за име, презиме и години. За класата да се дефинираат конструктори, деструктор и метод за печатење на објектот на екран во формат:
+Momche: Ime Prezime Godini.
+Да се дефинира класа Devojche со истите атрибути и методи со разлика во форматот на печатење:
+Devojche: Ime prezime godini.
+Креирајте класа Sredba која содржи податоци за едно момче и едно девојче.
+Креирајте функција print() која ги печати податоците за момчето и девојчето во следниот формат:
+Sredba: Momche: Ime Prezime Godini Devojche: Ime Prezime Godini.
+Напишете функција daliSiOdgovaraat() која печати “Si odgovaraat” доколку разликата на нивните години е помала или еднаква на 5 или “Ne si odgovaraat” во спротивно.
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+
+class Boy {
+private:
+    char fulName[50];
+    int age;
+public:
+    Boy(char *_fullName = "Vlatko", int _age=30) {
+        strcpy(fulName, _fullName);
+        //this->age = _age;
+        age = _age;
+    }
+    void print() {
+        cout << "Boy: " << fulName;
+        cout << " Age: " << age << endl;
+    }
+
+    const char *getFullName() {
+        return fulName;
+    }
+    const int getAge() {
+        return age;
+    }
+};
+class Girl {
+private:
+    char fullName[50];
+    int age;
+    public:
+    Girl (char *_fullName = "Mila", int _age=20) {
+        strcpy(fullName, _fullName);
+        age = _age;
+    }
+    void print() {
+        cout << "Girl: " << fullName;
+        cout << " Age: " << age << endl;
+    }
+    const char *getFullName() {
+        return fullName;
+    }
+    const int getAge() {
+        return age;
+    }
+};
+
+class Date {
+    private:
+    Boy boy;
+    Girl girl;
+    int counter;
+    public:
+    Date(const Boy &boy=Boy(), const Girl &girl=Girl(), int counter=5)
+        : boy(boy),
+          girl(girl),
+          counter(counter) {}
+    void print() {
+        cout << "Date between: " << endl;
+        boy.print();
+        cout << "&" << endl;
+        girl.print();
+        cout << "Count of the date: " << counter << endl;
+        if (isMatch()) {
+            cout << "Good match." << endl;
+        } else {
+            cout << "Not a match." << endl;
+        }
+    }
+    bool isMatch() {
+        int difference = abs(boy.getAge()-girl.getAge());
+        return difference <= 5 || counter >= 3;
+    }
+};
+int main() {
+    Boy boy1;
+    boy1.print();
+    Boy boy("Jovan", 25);
+    boy.print();
+    Boy boy3("Boris");
+    boy3.print();
+    Girl girl("Sonja", 17);
+    girl.print();
+    Girl girl1("Dragana", 30);
+    girl1.print();
+    Date date;
+    date.print();
+    Date date2(boy3, girl);
+    date2.print();
+    Date date3(boy3, girl, 1);
+    date3.print();
+    Date date4(boy, girl);
+    date4.print();
+    return 0;
+}
