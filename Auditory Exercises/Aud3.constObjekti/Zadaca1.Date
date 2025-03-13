@@ -1,11 +1,11 @@
-Да се дефинира класа Momche која содржи информации за име, презиме и години. За класата да се дефинираат конструктори, деструктор и метод за печатење на објектот на екран во формат:
-Momche: Ime Prezime Godini.
-Да се дефинира класа Devojche со истите атрибути и методи со разлика во форматот на печатење:
-Devojche: Ime prezime godini.
-Креирајте класа Sredba која содржи податоци за едно момче и едно девојче.
-Креирајте функција print() која ги печати податоците за момчето и девојчето во следниот формат:
-Sredba: Momche: Ime Prezime Godini Devojche: Ime Prezime Godini.
-Напишете функција daliSiOdgovaraat() која печати “Si odgovaraat” доколку разликата на нивните години е помала или еднаква на 5 или “Ne si odgovaraat” во спротивно.
+Define a class for Mate that is described with name, age and gender.
+Then, define a class Date that keeps data for two mates.
+In this class, implement a function bool isSuccess() that should compute the success of the date.
+The date is successful if the sum of sums of the ASCII values of the names of the mates is even number. 
+Also implement a function that will print the mates of the date in format:
+Date between:
+[Name] [Age] [Gender]
+[Name] [Age] [Gender]
 
 #include <iostream>
 #include <string.h>
