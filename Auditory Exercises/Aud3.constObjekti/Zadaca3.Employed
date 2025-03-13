@@ -5,3 +5,133 @@ One function returns the employee with the highest salary, and the other functio
 In the main program, it is necessary to print the data for the youngest and highest paid employee on the screen. 
 Printing the employee should be implemented with a special function print() within the Vraboten class.
 
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+
+class Date {
+private:
+    int day;
+    int month;
+    int year;
+    public:
+    Date(int day=1, int month=6, int year=2004)
+        : day(day),
+          month(month),
+          year(year) {
+    }
+
+    int day1() const {
+        return day;
+    }
+   int month1() const {
+        return month;
+    }
+    int year1() const {
+        return year;
+    }
+    void print() {
+        cout << day << "." << month << "." << year << endl;
+    }
+    bool isBefore(Date other) const {
+        if (year < other.year) {
+            return true;
+        } else if (year > other.year) {
+            return false;
+        } else {
+            if (month < other.month) {
+                return true;
+            } else if (month > other.month) {
+                return false;
+            } else {
+                if (day <= other.day) {
+                    return true;
+                } else  {
+                    return false;
+                } 
+            }
+        }
+    }
+
+};
+class Employee {
+private:
+    char name[50];
+    double salary;
+    Date dateOfBirth;
+    Date startDate;
+public:
+    Employee(char *_name="No name", double salary=21000, const Date &date_of_birth=Date(), const Date &start_date=Date(13,2,2022))
+        : salary(salary),
+          dateOfBirth(date_of_birth),
+          startDate(start_date) {
+        strcpy(name, _name);
+    }
+    void print () {
+        cout << "Name: " << name << endl;
+        cout << "Salary: " << salary << endl;
+        cout << "Date of birth: ";
+        dateOfBirth.print();
+        cout << "Date of start: ";
+        startDate.print();
+    }
+    const char *getName() {
+        return name;
+    }
+    double getSalary() {
+        return salary;
+    }
+
+    [[nodiscard]] Date getDate_of_birth() const {
+        return dateOfBirth;
+    }
+
+    [[nodiscard]] Date getStart_date() const {
+        return startDate;
+    }
+};
+Employee firstEmployee(Employee *employees, int n) {
+    Employee min = employees[0];
+    for (int i = 1; i < n; i++) {
+        if (employees[i].getStart_date().isBefore(min.getStart_date())) {
+            min = employees[i];
+        }
+    }
+}
+Employee highestSalaryEmployee(Employee *employees, int n) {
+    Employee max = employees[0];
+    for (int i = 1; i < n; i++) {
+        if (employees[i].getSalary() > max.getSalary()) {
+            max = employees[i];
+        }
+    }
+}
+int main() {
+    int n;
+    cin >> n;
+    cin.ignore();
+    Employee employees[10];
+    char name[20];
+    double salary;
+    int d,m,y;
+    for (int i = 0; i < n; i++) {
+        cin.getline(name, 100);
+        cin >> salary;
+        cin >> d >> m >> y;
+        Date dob(d,m,y);
+        cin >> d >> m >> y;
+        Date startDate(d,m,y);
+        employees[i]=Employee(name, salary, dob, startDate);
+        cin.ignore();
+    }
+    for (int i = 0; i < n; i++) {
+        employees[i].print();
+    }
+    cout << "Highest salary employee: " << endl;
+    highestSalaryEmployee(employees, n);
+    
+
+    return 0;
+}
