@@ -1,0 +1,107 @@
+Во оваа задача треба да имплементираш две класи: MobilePhone и Owner.
+Класа MobilePhone
+Оваа класа ја претставува основната структура за мобилен телефон со следниве атрибути:
+
+model – низа од 20 знаци што го чува моделот на телефонот
+num – број што го претставува серискиот број на телефонот
+year – број што ја претставува годината на издавање на телефонот
+Конструктор без параметри – иницијализира празен модел и нулти вредности за останатите атрибути.
+Конструктор со параметри – иницијализира мобилен телефон со зададени вредности.
+Конструктор за копирање – креира нов објект со исти вредности како друг објект од истата класа.
+Метод print() – ги печати податоците за мобилниот
+
+Класа Owner
+Оваа класа претставува сопственик на мобилен телефон со следниве атрибути:
+
+name – низа од 20 знаци што го чува името на сопственикот
+surname – низа од 20 знаци што го чува презимето на сопственикот
+phone – објект од класата MobilePhone кој го претставува телефонот на сопственикот
+Методи:
+Конструктор без параметри – иницијализира празни вредности за името, презимето и телефонот.
+Конструктор со параметри – иницијализира сопственик со дадено име, презиме и мобилен телефон.
+Метод print() 
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class MobilePhone {
+    char model[20];
+    int num;
+    int year;
+public:
+    MobilePhone() {
+        strcpy(this->model, " ");
+        num = 0;
+        year = 0;
+    }
+    MobilePhone(char *model, int num, int year) {
+        strcpy(this->model, model);
+        this->num = num;
+        this->year = year;
+    }
+    MobilePhone(const MobilePhone& other) {
+        strcpy(this->model, other.model);
+        this->num = other.num;
+        this->year = other.year;
+    }
+    void print() {
+        cout << model << " " << num << " relese year: " << year << endl;
+    }
+    ~MobilePhone() {}
+};
+class Owner {
+    char name[20];
+    char surname[20];
+    MobilePhone phone;
+
+    public:
+    Owner() {
+        strcpy(this->name, " ");
+        strcpy(this->surname, " ");
+        this->phone = MobilePhone();
+    }
+    Owner(char *name, char *surname, MobilePhone phone) {
+        strcpy(this->name, name);
+        strcpy(this->surname, surname);
+        this->phone = phone;
+    }
+    void print() {
+        cout << name << " " << surname << " has a mobile phone: " << endl;
+        phone.print();
+    }
+    ~Owner() {}
+};
+
+//DO NOT CHANGE THE MAIN FUNCTION
+int main() {
+    char model[20];
+    int modelNumber;
+    int year;
+    char name[20];
+    char surname[20];
+
+    int testCase;
+
+    cin>>testCase;
+
+    cin>>model;
+    cin>>modelNumber;
+    cin>>year;
+    cin>>name;
+    cin>>surname;
+
+    if(testCase==1){
+        MobilePhone mobilePhone(model,modelNumber,year);
+
+        Owner owner(name,surname,mobilePhone);
+        owner.print();
+    }
+    if(testCase==2){
+        MobilePhone mobilePhone(MobilePhone(model,modelNumber,year));
+
+        Owner owner(name,surname,mobilePhone);
+        owner.print();
+    }
+
+}
