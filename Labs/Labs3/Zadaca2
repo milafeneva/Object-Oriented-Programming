@@ -1,0 +1,116 @@
+Класа InvoiceItem
+Оваа класа претставува ставка (артикл) од фактурата со следниве атрибути:
+
+name – низа од 100 знаци што го чува името на артиклот
+price – цел број што ја претставува цената на артиклот
+Методи:
+Конструктор без параметри – иницијализира празно име и цена 0.
+Конструктор со параметри – иницијализира артикл со дадено име и цена.
+Конструктор за копирање – копира друг артикл. (ИМА ГРЕШКА ВО ТВОЈОТ КОД: this->price, other.price; треба да биде this->price = other.price;)
+Метод getPrice() – ја враќа цената на артиклот.
+Деструктор – празен, бидејќи не се користи динамичка меморија.
+2. Класа Invoice
+Оваа класа претставува фактура која содржи повеќе ставки (артикли). Има следниве атрибути:
+
+number – низа од 10 знаци што го чува бројот на фактурата
+n – цел број што го означува бројот на артикли во фактурата
+items – низа од објекти InvoiceItem со максимум 100 артикли
+Методи:
+Конструктор без параметри – иницијализира празен број на фактура и број на артикли 0.
+Конструктор со параметри – иницијализира фактура со даден број, број на артикли и низа од артикли.
+Конструктор за копирање – креира нова фактура како копија од постоечка.
+Метод getNumber() – ја враќа вредноста на бројот на фактурата.
+Метод totalPrice() – ја пресметува вкупната цена на фактурата со собирање на сите артикли.
+Деструктор – празен, бидејќи не се користи динамичка меморија.
+
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class InvoiceItem {
+    char name[20];
+    int price;
+public:
+    InvoiceItem() {
+        strcpy(this->name, "");
+        price = 0;
+    }
+    InvoiceItem(char *name, int price) {
+        strcpy(this->name, name);
+        this->price = price;
+    }
+    InvoiceItem(const InvoiceItem& other) {
+        strcpy(this->name, other.name);
+        this->price = other.price;
+    }
+    int getPrice() {
+        return price;
+    }
+    ~InvoiceItem() {}
+};
+class Invoice {
+    char number[100];
+    int n;
+    InvoiceItem items[100];
+
+    public:
+    Invoice() {
+        strcpy(this->number, " ");
+        n = 0;
+    }
+    Invoice(char *number, int n, InvoiceItem *items) {
+        strcpy(this->number, number);
+        this->n = n;
+        for (int i = 0; i < 100; i++) {
+            this->items[i] = items[i];
+        }
+    }
+    Invoice(const Invoice &other) {
+        strcpy(this->number, other.number);
+        this->n = other.n;
+        for (int i = 0; i < 100; i++) {
+            this->items[i] = other.items[i];
+        }
+    }
+    char *getNumber() {
+        return number;
+    }
+    int totalPrice() {
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += items[i].getPrice();
+        }
+        return sum;
+    }
+    ~Invoice() {}
+};
+
+// DO NOT CHANGE THE MAIN FUNCTION
+int main()
+{
+    char number[10];
+    int n;
+    // testing default constructor
+    InvoiceItem items[100];
+    cin >> number >> n;
+    for (int i = 0; i < n; i++) {
+        char name[100];
+        int price;
+        cin >> name;
+        cin >> price;
+
+        // testing constructor with parameters
+        InvoiceItem item(name, price);
+
+        // testing copy constructor
+        items[i] = item;
+    }
+    // testing constructor with parameters for Invoice
+    Invoice invoice(number, n, items);
+
+    // testing totalPrice function
+    cout << "Total price for invoice number " << invoice.getNumber() << " is " << invoice.totalPrice() << endl;
+
+    return 0;
+}
