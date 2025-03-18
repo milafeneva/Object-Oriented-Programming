@@ -1,0 +1,91 @@
+Define a class Team that is described with name, year of founding and the city. 
+Define a class Game that keeps information for the host and the guest (objects of class Team), goals scored by the host and goals scored by the guest.
+
+Define a function rematch that as arguments accepts two objects of class Game and checks if one of them is a rematch of the other. 
+A match is a rematch if the host of the first game is a guest in the second game, and vice versa. 
+If the match is a rematch, return the aggregate winner of the fixture (the one that scored more goals on aggregate).
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class Team {
+    char name[50];
+    int foundingYear;
+    char city[50];
+public:
+    Team(char *_name=" ", int _foundingYear=1990, char *_city=" ") {
+        strcpy(name, _name);
+        foundingYear = _foundingYear;
+        strcpy(city, _city);
+    }
+    Team (const Team &team) {
+        strcpy(name, team.name);
+        foundingYear = team.foundingYear;
+        strcpy(city, team.city);
+    }
+    ~Team() {}
+    bool isEqual(Team other) {
+        return strcmp(name, other.name) == 0;
+    }
+    void print() {
+        cout << name << endl;
+    }
+    void setName(const char*string) {
+        strcpy(name, string);
+    }
+};
+class Game {
+    Team homeTeam;
+    Team awayTeam;
+    int homeGoals;
+    int awayGoals;
+public:
+    Game(Team _homeTeam, Team _awayTeam, int _homeGoals, int _awayGoals) {
+        homeTeam = _homeTeam;
+        awayTeam = _awayTeam;
+        homeGoals = _homeGoals;
+        awayGoals = _awayGoals;
+    }
+    Game() {
+        homeGoals = 0;
+        awayGoals = 0;
+    }
+    Game (const Game &game) {
+        homeTeam = game.homeTeam;
+        awayTeam = game.awayTeam;
+        homeGoals = game.homeGoals;
+        awayGoals = game.awayGoals;
+    }
+    ~Game() {}
+    bool isRematch(Game other) {
+        return (homeTeam.isEqual(other.awayTeam) && awayTeam.isEqual(other.homeTeam));
+    }
+    friend Team duel(Game first, Game second);
+};
+Team duel(Game first, Game second) {
+    if (first.isRematch(second)) {
+        int goalsOfFirstTeam = first.homeGoals + second.awayGoals;
+        int goalsOfSecondTeam = first.awayGoals + second.homeGoals;
+        if (goalsOfFirstTeam > goalsOfSecondTeam) {
+            return first.homeTeam;
+        } else if (goalsOfFirstTeam < goalsOfSecondTeam) {
+            return second.awayTeam;
+        } else {
+            return nullptr;
+        }
+    } else {
+        return nullptr;
+    }
+}
+
+int main() {
+    Team team1("Barca", 1890, "Barcelona");
+    Team team2("Real Madrid", 1888, "Madrid");
+    Team team3(team2);
+    team3.setName("Arsenal");
+    Game firstGame(team1, team2, 10, 5);
+    Game secondGame(team2, team3, 4, 6);
+    duel(firstGame, secondGame).print();
+
+}
