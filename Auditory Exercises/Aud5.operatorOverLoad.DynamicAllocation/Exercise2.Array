@@ -37,13 +37,82 @@ public:
     ~Array() {
         delete[] content;
     }
+    void add(int number) {
+        if (size < capacity) {
+            content[size] = number;
+            size++;
+        } else {
+            //1. move all elements and the new element in temp array
+            capacity *= 2;
+            int *temp = new int[capacity];
+            for (int i = 0; i < size; i++) {
+                temp[i] = content[i];
+            }
+            temp[size++] = number;
+            delete[] content;
+            content = temp;
+            capacity *= 2;
+        }
+    }
+    //content ni e pokazuvac kon nasata niza
+    //gi smestuvame site elementi vo nea i novite
+    //potoa gi briseme od najprvoto mesto, i content sega pokazuva kon kako temp
+    //se zgolemuva kapacitetot
+    void change(int a, int b) {
+        for (int i = 0; i < size; i++) {
+            if (content[i] == a) {
+                content[i] = b;
+            }
+        }
+    }
+    int countOccurences(int number) {
+        int counter = 0;
+        for (int i = 0; i < size; i++) {
+            if (content[i] == number) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+    void deleteAll(int number) {
+        int occurences = countOccurences(number);
+        int j = 0;
+        for (int i = 0; i < size; i++) {
+            if (content[i] != number) {
+                content[j++] = content[i];
+            }
+        }
+        this->size = occurences;
+    }
+    void print() {
+        cout << "Capacity: " << capacity << endl;
+        cout << "Size: " << size << endl;
+        cout << "Percentage filled : " << (100.0*size)/capacity <<"%" << endl;
+        for (int i = 0; i < size; i++) {
+            if (i!= size-1) {
+                cout << content[i] << ", ";
+            } else {
+                cout << content[i];
+            }
+        }
+    }
 };
 
+
+
 int main() {
-    Array a1;
-    Array a2;
+    // Array a1;
+    // Array a2;
+    // a1=a2
     //operator = se povikuva vo ovoj slucaj
     //dali se povikuva vo nekoj drug slucaj, i dali e za drugo korisen
+    Array a;
+    a.print();
+    for (int i = 0; i < 10; i++) {
+        a.add(i);
+    }
+    a.print();
+
     return 0;
 
 }
