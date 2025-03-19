@@ -1,0 +1,41 @@
+Работи кои мораме да ги имаме во една класа: default constuctor, copy-constryctor, operator=, 
+  destructor. 
+  Default конструктор се повикува кога креираме низа како во примерот долу:
+  
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class String {
+private:
+    char *str;
+    public:
+    //MUST:  Copy constructor, operator =, destructor
+    //default constructor i with arguments
+    String(char *str = " ") { //2vo1
+        //1. allocate memory for this->str
+        this->str = new char[strlen(str) + 1];
+        strcpy(this->str, str);
+    }
+    String(const String& other) {
+        this->str = new char[strlen(other.str) + 1];
+        strcpy(this->str, other.str);
+    }
+    ~String() {
+        delete[] this->str;
+    }
+    String& operator= (const String& s) {
+        if (this!=&s) {
+            delete[] str;
+            this->str = new char[strlen(s.str) + 1];
+            strcpy(this->str, s.str);
+        }
+        return *this;
+    }
+};
+
+int main() {
+    String strings[10];
+    //10 calls for the default constructor
+
+}
