@@ -3,3 +3,82 @@
 
 Потоа, да се креира класа Airport со податоци: име на аеродромот (char) , број на летови (int), листа на летови (Flight * flights). Да се креира конструктор со параметри. 
 Дополнително, да се креира функција во класата - Flight cheapestFlight() - ќе го враќа најевтиниот лет.
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class Flight {
+    char name[20];
+    char arrival[20];
+    char departure[20];
+    int price;
+public:
+    Flight(char *_name = " ", char *_arrival = " ", char *departure_ = " ", int _price = 0) {
+        strcpy(this->name, _name);
+        strcpy(this->arrival, _arrival);
+        strcpy(this->departure, departure_);
+        this->price = _price;
+    }
+    Flight (const Flight &other) {
+        strcpy(this->name, other.name);
+        strcpy(this->arrival, other.arrival);
+        strcpy(this->departure, other.departure);
+        this->price = other.price;
+    }
+
+    char *getFlightName() {
+        return name;
+    }
+    char *getFlightArrival() {
+        return arrival;
+    }
+    char *getFlightDeparture() {
+        return departure;
+    }
+    int getPrice() {
+        return price;
+    }
+};
+Flight cheapestFlight(Flight *flight, int numOfFlights) {
+    Flight cheapest = flight[0];
+    int index = 0;
+    for (int i = 1; i < numOfFlights; i++) {
+        if (flight[i].getPrice() < cheapest.getPrice()) {
+            cheapest = flight[i];
+            index = i;
+        }
+    }
+    return cheapest;
+}
+class Airport {
+    char name[20];
+    int numOfFlights;
+    Flight* flights;
+    public:
+    Airport(char *_name = "", int _numOfFlights = 0, Flight* _flights = NULL) {
+        strcpy(this->name, _name);
+        this->numOfFlights = _numOfFlights;
+        this->flights = _flights;
+    }
+};
+
+int main() {
+    // Примерни летови
+    Flight f1("Flight 101", "Belgrade", "Paris", 250);
+    Flight f2("Flight 102", "New York", "London", 150);
+    Flight f3("Flight 103", "Berlin", "Dubai", 200);
+
+    Flight flights[] = {f1, f2, f3}; // Масив со летови
+    Airport airport("Nikola Tesla", 3, flights); // Креирање на аеродром
+
+    // Пребарување на најевтиниот лет
+    Flight cheapest = cheapestFlight(flights, 3);
+    cout << "Cheapest flight: " << cheapest.getFlightName()
+      << " from " << cheapest.getFlightDeparture()
+      << " to " << cheapest.getFlightArrival()
+      << " costs $" << cheapest.getPrice() << endl;
+
+
+    return 0;
+}
