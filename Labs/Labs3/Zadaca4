@@ -1,0 +1,5 @@
+3) Да се креира класа Flight со податоци: име на летот, место на слетување (arrival), место на заминување (departure) - трите со char, и цена на летот - int. 
+Да се направи default constructor, copy constructor, constructor со параметри и funkcii geteri: getFlightName, getArrival, getDeparture.
+
+Потоа, да се креира класа Airport со податоци: име на аеродромот (char) , број на летови (int), листа на летови (Flight * flights). Да се креира конструктор со параметри. 
+Дополнително, да се креира функција во класата - Flight cheapestFlight() - ќе го враќа најевтиниот лет.
