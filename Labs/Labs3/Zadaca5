@@ -8,3 +8,88 @@ date.print()
 cout << model << endl;
 
 Потоа, да се креира надворешна функција, мислам дека беше void cheapCars(Car *cars, int numberOfCars, int price) - да ги печати сите коли на кои цената им е помала од price
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class Date {
+    int year;
+    int month;
+    int day;
+    public:
+    Date(int _year = 0, int _month = 0, int _day = 0) {
+        this->year = _year;
+        this->month = _month;
+        this->day = _day;
+    }
+    int getYear() {
+        return year;
+    }
+    int getMonth() {
+        return month;
+    }
+    int getDay() {
+        return day;
+    }
+    void print() {
+        cout << year << "."<< month << "."<< day << endl;
+    }
+};
+class Person {
+    char name[20];
+    char surname[20];
+    public:
+    Person(const char *_name = " ", const char *_surname = " ") {
+        strcpy(this->name, _name);
+        strcpy(this->surname, _surname);
+    }
+    void print() {
+        cout << name << " " << surname << endl;
+    }
+};
+class Car {
+    Person owner;
+    Date date;
+    char model[20];
+    int price;
+    public:
+    Car(Person _owner, Date _date, const char *_model, int _price) {
+        this->owner = _owner;
+        this->date = _date;
+        strcpy(this->model, _model);
+        this->price = _price;
+    }
+    void print() {
+        owner.print();
+        date.print();
+        cout << model << endl;
+    }
+    int getPrice() {
+        return price;
+    }
+};
+void cheapCars(Car *cars, int numberOfCars, int price){
+    for (int i = 0; i < numberOfCars; i++) {
+        if (cars[i].getPrice() < price) {
+            cars[i].print();
+        }
+    }
+}
+
+int main() {
+    Person p1("John", "Doe");
+    Person p2("Alice", "Smith");
+
+    Date d1(2023, 5, 10);
+    Date d2(2020, 3, 15);
+
+    Car c1(p1, d1, "Toyota", 5000);
+    Car c2(p2, d2, "Honda", 3000);
+
+    Car cars[] = {c1, c2};
+
+    cout << "Cars cheaper than $4000:\n";
+    cheapCars(cars, 2, 4000);
+
+    return 0;
+}
