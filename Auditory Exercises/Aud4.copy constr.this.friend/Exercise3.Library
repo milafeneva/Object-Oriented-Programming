@@ -1,0 +1,105 @@
+Да се дефинира класа Book која соджи информации за името на книгата, името на авторот и нејзината достапност. 
+За оваа класа да се дефинираат сите три конструктори и деструктор. Потоа, да се дефинира класа Library која е пријател на класата Book.
+Во оваа класа се чува името на библиотеката(иницијално поставено “Braka Miladinovci”), низа објекти од класата Book и бројот на книги(иницијално поставен на 0). 
+За оваа класа да се дефинира метод addBook кој додава книга во низата книги и метод за печатење на сите информации за библиотеката. 
+Да се дефинира и трета класа LibraryMember во која се чуваат информации за име и идентификациски број, за членот во библиотеката. 
+Да се обезбедат соодветни конструктори, деструктори, set и get методи доколку се потребни.
+
+Да се дефинира функција checkOutBook која е пријател на сите три класи и како аргументи прима еден член, библиотека и индекс на една книга. 
+Со оваа функција треба да се ажурира достапноста кога некој ќе побара книга и да се печати соодветна порака ако книгата не е достапна.
+
+Во главната програма да се направи еден објект од класата Library, да се внесат информации за најмногу 30 книги и истите да се додадат во библиотеката. 
+Потоа да се испечатат информациите за библиотеката. Да се креира и еден член на библиотеката и дополнително да се внесе редниот број на книгата што сака да ја позајми. Да се провери дали таа книга е достапна.
+
+
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class Library;
+class LibraryMember;
+
+class Book {
+    char name[30];
+    char author[30];
+    bool availability;
+    friend void checkOutBook(LibraryMember &l, Library &lib, int index);
+public:
+    Book() {}
+    Book (char *name = " ", char *author = " ", bool availability = 1) {
+        strcpy(this->name, name);
+        strcpy(this->author, author);
+        this->availability = availability;
+    }
+    void print() {
+        cout << name << " " << " " << author << " " << availability << endl;
+    }
+    Book (const Book&b) {
+        strcpy(name, b.name);
+        strcpy(author, b.author);
+        availability = b.availability;
+    }
+    void printt() {
+        cout << name << " " << author << endl;
+    }
+    friend class Library;
+};
+class Library {
+private:
+    char ime[30];
+    Book knigi[30];
+    int numberOfBooks;
+    friend void checkOutBook(LibraryMember &l, Library &lib, int index);
+public:
+    Library() {
+        strcpy(ime, "Braka Miladinovci");
+        numberOfBooks = 0;
+    }
+    void addBook(Book b) {
+        if(numberOfBooks < 30) {
+            for (int i = 0; i < numberOfBooks; i++) {
+                if(strcmp(knigi[i].author, b.author) == 0) {
+                    if(!knigi[i].availability && b.availability) {
+                        knigi[i] = b;
+                    }
+                    return;
+                }
+            }
+            knigi[numberOfBooks++] = b;
+        }
+    }
+    void print() {
+        cout << ime << " " << endl;
+        for (int i = 0; i < numberOfBooks; i++) {
+            knigi[i].printt();
+        }
+    }
+};
+class LibraryMember {
+    char name[20];
+    int id;
+public:
+    LibraryMember(char *name, int id) {
+        strcpy(this->name, name);
+        this->id = id;
+    }
+};
+void checkOutBook(LibraryMember &l, Library &lib, int index) {
+    if(lib.knigi[index].availability) {
+        lib.knigi[index].availability = 0;
+        cout << "Uspesno iznajmena" << endl;
+    } else {
+        cout << "Neuspesno iznajmena" << endl;
+    }
+}
+int main() {
+    Book b("Harry Potter", "J.K.Rowling", 1);
+    LibraryMember l("Mila", 241073);
+    Library lib;
+    lib.addBook(b);
+    lib.print();
+    checkOutBook(l, lib,0);
+
+
+}
