@@ -11,8 +11,6 @@
 Во главната програма да се направи еден објект од класата Library, да се внесат информации за најмногу 30 книги и истите да се додадат во библиотеката. 
 Потоа да се испечатат информациите за библиотеката. Да се креира и еден член на библиотеката и дополнително да се внесе редниот број на книгата што сака да ја позајми. Да се провери дали таа книга е достапна.
 
-
-
 #include <iostream>
 #include <string.h>
 using namespace std;
@@ -27,13 +25,17 @@ class Book {
     friend void checkOutBook(LibraryMember &l, Library &lib, int index);
 public:
     Book() {}
-    Book (char *name = " ", char *author = " ", bool availability = 1) {
+    // Book() {
+    //     strcpy(name, " ");
+    //     strcpy(author, " ");
+    //     availability = false;
+    // }
+    //dali e podobro vaka konst
+    //prasanje za const
+    Book (const char *name = " ", const char *author = " ", bool availability = 1) {
         strcpy(this->name, name);
         strcpy(this->author, author);
         this->availability = availability;
-    }
-    void print() {
-        cout << name << " " << " " << author << " " << availability << endl;
     }
     Book (const Book&b) {
         strcpy(name, b.name);
@@ -80,7 +82,7 @@ class LibraryMember {
     char name[20];
     int id;
 public:
-    LibraryMember(char *name, int id) {
+    LibraryMember(char *name = " ", int id = 0) {
         strcpy(this->name, name);
         this->id = id;
     }
@@ -97,9 +99,10 @@ int main() {
     Book b("Harry Potter", "J.K.Rowling", 1);
     LibraryMember l("Mila", 241073);
     Library lib;
+
     lib.addBook(b);
     lib.print();
-    checkOutBook(l, lib,0);
 
-
+    checkOutBook(l, lib,1);
+    lib.print();
 }
