@@ -1,0 +1,133 @@
+#include <iostream>
+#include <iomanip>
+#include <cstring>
+#include <fstream>
+using namespace std;
+
+class Ucesnik {
+    char *ime;
+    bool pol;
+    int age;
+    void copy(const Ucesnik& other) {
+        ime = new char[strlen(other.ime)+1];
+        strcpy(ime, other.ime);
+        pol = other.pol;
+        age = other.age;
+    }
+public:
+    int getAge() {
+        return age;
+    }
+    Ucesnik(char *name = " ", bool pol = false, int age = 18) {
+        this->ime = new char[strlen(name) + 1];
+        strcpy(this->ime, name);
+        this->pol = pol;
+        this->age = age;
+    }
+    Ucesnik(const Ucesnik &u) {
+        copy(u);
+    }
+    Ucesnik &operator=(const Ucesnik &u) {
+        if (this != &u) {
+            delete [] ime;
+            copy(u);
+        }
+        return *this;
+    }
+    ~Ucesnik() {
+        delete [] ime;
+    }
+    bool operator>(const Ucesnik &u) {
+        return age > u.age;
+    }
+    friend ostream &operator<<(ostream &os, const Ucesnik &u) {
+        os<<u.ime<<endl;
+        if (u.pol==true) {
+            os<<"mashki"<<endl;
+        }else {
+            os<<"zhenski"<<endl;
+        }
+        os<<u.age<<endl;
+        return os;
+    }
+};
+class Maraton {
+    char location[100];
+    Ucesnik *ucesnici;
+    int n;
+    void copy(const Maraton& other) {
+        strcpy(location, other.location);
+        n = other.n;
+        ucesnici = new Ucesnik[other.n];
+        for (int i = 0; i < other.n; i++) {
+            ucesnici[i] = other.ucesnici[i];
+        }
+    }
+public:
+    Maraton(char *location = " ") {
+        strcpy(this->location, location);
+        this->n = 0;
+        ucesnici = nullptr;
+    }
+    Maraton(const Maraton &m) {
+        copy(m);
+    }
+    Maraton &operator=(const Maraton &m) {
+        if (this != &m) {
+            delete [] ucesnici;
+            copy(m);
+        }
+        return *this;
+    }
+    ~Maraton() {
+        delete [] ucesnici;
+    }
+    Maraton &operator+=(Ucesnik &u) {
+        Ucesnik *new_u=new Ucesnik[n+1];
+        for (int i=0;i<n;i++) {
+            new_u[i]=ucesnici[i];
+        }
+        new_u[n]=u;
+        delete [] ucesnici;
+        ucesnici=new_u;
+        n++;
+        return *this;
+    }
+    double prosecnoVozrast() {
+        int average = 0;
+        for (int i=0;i<n;i++) {
+            average += ucesnici[i].getAge();
+        }
+        return double(average)/ double(n);
+    }
+    Ucesnik pecatiPomladi(Ucesnik &u) {
+        for (int i=0;i<n;i++) {
+            if (u > ucesnici[i]) {
+                cout << ucesnici[i];
+            }
+        }
+    }
+};
+
+int main() {
+    char ime[100];
+    bool maski;
+    int vozrast, n;
+    cin >> n;
+    char lokacija[100];
+    cin >> lokacija;
+    Maraton m(lokacija);
+    Ucesnik **u = new Ucesnik*[n];
+    for(int i = 0; i < n; ++i) {
+        cin >> ime >> maski >> vozrast;
+        u[i] = new Ucesnik(ime, maski, vozrast);
+        m += *u[i];
+    }
+    m.pecatiPomladi(*u[n - 1]);
+    cout << m.prosecnoVozrast() << endl;
+    for(int i = 0; i < n; ++i) {
+        delete u[i];
+    }
+    delete [] u;
+    return 0;
+}
