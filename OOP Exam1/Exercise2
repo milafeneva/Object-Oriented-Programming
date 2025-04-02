@@ -1,0 +1,184 @@
+#include <iostream>
+using namespace std;
+
+class List {
+    int *numbers;
+    int numOfNumbers;
+    void copy(const List& other) {
+        numOfNumbers = other.numOfNumbers;
+        numbers = new int[other.numOfNumbers];
+        for (int i = 0; i < numOfNumbers; i++) {
+            numbers[i] = other.numbers[i];
+        }
+    }
+    public:
+    int getNumOfNumbers() {
+        return numOfNumbers;
+    }
+    List(int *numbers = nullptr, int numOfNumbers = 0) {
+        this->numOfNumbers = numOfNumbers;
+        this->numbers = new int[numOfNumbers];
+        for (int i = 0; i < numOfNumbers; i++) {
+            this->numbers[i] = numbers[i];
+        }
+    }
+    List(const List &other) {
+        copy(other);
+    }
+    List &operator=(const List& other) {
+        if (this != &other) {
+            delete[] numbers;
+            copy(other);
+        }
+        return *this;
+    }
+    ~List() {
+        delete[] numbers;
+    }
+    int sum() {
+        int sum = 0;
+        for (int i = 0; i < numOfNumbers; i++) {
+            sum += numbers[i];
+        }
+        return sum;
+    }
+    double average() {
+        int sum = 0;
+        for (int i = 0; i < numOfNumbers; i++) {
+            sum += numbers[i];
+        }
+        if (numOfNumbers == 0) {
+            return 0;
+        }
+        return (double) sum / double(numOfNumbers);
+    }
+    void pecati() {
+        cout << numOfNumbers << ": ";
+        for (int i = 0; i < numOfNumbers; i++) {
+            cout  << numbers[i] << " ";
+        }
+        cout << "sum: " << sum() << " average: " << average() << endl;
+    }
+};
+class ListContainer {
+    List *lists;
+    int brojElementi;
+    int brojObidi;
+    void copy(const ListContainer& other) {
+        brojElementi = other.brojElementi;
+        lists = new List[other.brojElementi];
+        for (int i = 0; i < brojElementi; i++) {
+            lists[i] = other.lists[i];
+        }
+        brojObidi = other.brojObidi;
+    }
+    public:
+    int getBrojElementi() {
+        return brojElementi;
+    }
+    ListContainer() {
+        this->brojElementi=0;
+        this->lists=nullptr;
+        this->brojObidi=0;
+    }
+    ListContainer(const ListContainer& other) {
+        copy(other);
+    }
+    ListContainer &operator=(const ListContainer& other) {
+        if (this != &other) {
+            delete[] lists;
+            copy(other);
+        }
+    }
+    ~ListContainer() {
+        delete[] lists;
+    }
+    int sum() {
+        int sum = 0;
+        for (int i = 0; i < brojElementi; i++) {
+            sum += lists[i].sum();
+        }
+        return sum;
+    }
+    double average() {
+        int count = 0;
+        for (int i = 0; i < brojElementi; i++) {
+            count += lists[i].getNumOfNumbers();
+        }
+        if (brojElementi == 0) {
+            return 0;
+        }
+        return double(sum()) / double(count);
+    }
+    void print() {
+        if (brojElementi == 0) {
+            cout << "The list is empty" << endl;
+            return;
+        }
+        for (int i = 0; i < brojElementi; i++) {
+            cout << "List number: " << i+1 << " List info: ";
+            lists[i].pecati();
+        }
+        cout << "Sum: " << sum() << " Average: " << average() << endl;
+        cout << "Successful attempts: " << brojElementi << " Failed attempts: " << brojObidi-brojElementi << endl;
+    }
+    void addNewList(List l) {
+        brojObidi++;
+        for (int i = 0; i < brojElementi; i++) {
+            if (lists[i].sum() == l.sum()) {
+                return;
+            }
+        }
+        List *newList = new List[brojElementi+1];
+        for (int i = 0; i < brojElementi; i++) {
+            newList[i] = lists[i];
+        }
+        newList[brojElementi] = l;
+        delete[] lists;
+        lists = newList;
+        brojElementi++;
+    }
+};
+
+int main() {
+
+    ListContainer lc;
+    int N;
+    cin>>N;
+
+    for (int i=0;i<N;i++) {
+        int n;
+        int niza[100];
+
+        cin>>n;
+
+        for (int j=0;j<n;j++){
+            cin>>niza[j];
+
+        }
+
+        List l=List(niza,n);
+
+        lc.addNewList(l);
+    }
+
+
+    int testCase;
+    cin>>testCase;
+
+    if (testCase==1) {
+        cout<<"Test case for operator ="<<endl;
+        ListContainer lc1;
+        lc1.print();
+        cout<<lc1.sum()<<" "<<lc.sum()<<endl;
+        lc1=lc;
+        lc1.print();
+        cout<<lc1.sum()<<" "<<lc.sum()<<endl;
+        lc1.sum();
+        lc1.average();
+
+    }
+    else {
+        lc.print();
+    }
+}
