@@ -1,0 +1,127 @@
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+#include <cstring>
+#include <cctype>
+#include <cmath>
+#include <fstream>
+using namespace std;
+using namespace std;
+
+class Patnik{
+private:
+	char name[100];
+    int brojNaKlasata;
+    bool bicycle;
+public:
+    Patnik(const char* name = " ", int brojNaKlasata = 1, bool bicycle = false) {
+        strcpy(this->name, name);
+        this->brojNaKlasata = brojNaKlasata;
+        this->bicycle = bicycle;
+    }
+    friend ostream &operator<<(ostream &out, const Patnik &p) {
+        out<<p.name<<endl<<p.brojNaKlasata<<endl<<p.bicycle<<endl;
+        return out;
+    }
+    bool getBicycle() {
+        return bicycle;
+    }
+    int getBrojKlasa() {
+        return brojNaKlasata;
+    }
+};
+class Voz{
+private:
+    char endDestination[100];
+    Patnik *patnici;
+    int n;
+    int allowed;
+public:
+    Voz() {}
+    Voz(char *endDestination = "", int allowed = 0) {
+        strcpy(this->endDestination, endDestination);
+        this->n = 0;
+        this->allowed = allowed;
+        this->patnici = nullptr;
+    }
+    Voz &operator+=(Patnik &p) {
+        int current_allowed=allowed;
+        for (int i=0;i<n;i++) {
+            if (patnici[i].getBicycle()==true) {
+                current_allowed++;
+            }
+        }
+        if (p.getBicycle()==true && current_allowed<=0) {
+            return *this;
+        }
+        Patnik *new_patnici=new Patnik[n+1];
+        for (int i=0;i<n;i++) {
+            new_patnici[i]=patnici[i];
+        }
+        if (p.getBicycle()==true) {
+            current_allowed--;
+        }
+        new_patnici[n]=p;
+        delete [] patnici;
+        patnici=new_patnici;
+        this->n++;
+        return *this;
+    }
+    friend ostream &operator<<(ostream &out, const Voz &p) {
+        out<<p.endDestination<<endl;
+        for (int i=0;i<p.n;i++) {
+            out<<p.patnici[i]<<endl;
+        }
+        return out;
+    }
+    void patniciNemaMesto() {
+        int currentAllowed = allowed;
+        int firstClass = 0;
+        int secondClass = 0;
+        for (int i=0;i<n;i++) {
+            if (patnici[i].getBrojKlasa()== 1 && patnici[i].getBicycle() == true) {
+                if (currentAllowed <= 0) {
+                    firstClass++;
+                } else {
+                    currentAllowed--;
+                }
+            }
+        }
+        for (int i=0;i<n;i++) {
+            if (patnici[i].getBrojKlasa() == 2 && patnici[i].getBicycle() == true) {
+                if (currentAllowed <= 0) {
+                    secondClass++;
+                } else {
+                    currentAllowed--;
+                }
+            }
+        }
+        cout << "Brojot na patnici od 1-va klasa koi ostanale bez mesto e: " << firstClass << endl;
+        cout << "Brojot na patnici od 2-ra klasa koi ostanale bez mesto e: " << secondClass << endl;
+    }
+};
+
+
+int main()
+{
+    Patnik p;
+    char ime[100], destinacija[100];
+    int n;
+    bool velosiped;
+    int klasa;
+    int maxv;
+    cin >> destinacija >> maxv;
+    cin >> n;
+    Voz v(destinacija, maxv);
+    //cout<<v<<endl;
+    for (int i = 0; i < n; i++){
+        cin >> ime >> klasa >> velosiped;
+        Patnik p(ime, klasa, velosiped);
+        //cout<<p<<endl;
+        v += p;
+    }
+    cout << v;
+    v.patniciNemaMesto();
+
+    return 0;
+}
