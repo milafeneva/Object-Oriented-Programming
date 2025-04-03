@@ -1,0 +1,100 @@
+#include <iomanip>
+#include <iostream>
+#include <set>
+#include <string.h>
+using namespace std;
+
+class SMS;
+class Date {
+    int day;
+    int month;
+    int year;
+    public:
+    Date(int day = 1, int month = 1, int year = 2025)
+        : day(day),
+          month(month),
+          year(year) {
+    }
+    void print() {
+        // cout << setfill('0')<< set(2) << day << "/" << setfill('0')<< month << "/" << setfill('0')<< year << endl;
+        cout << day << "/" << month << "/" << year;
+    }
+    bool isAfter(Date & other) {
+        if(this->year > other.year) {
+            return true;
+        } else if (this->year < other.year) {
+            return false;
+        } else {
+            if(this->month > other.month) {
+                return true;
+            } else if (this->month < other.month) {
+                return false;
+            } else {
+                if (this->day > other.day) {
+                    return true;
+                } else if(this->day < other.day) {
+                    return false;
+                }
+            }
+        }
+    }
+    friend void filter(SMS messages[20], int n, Date &start);
+};
+class SMS {
+private:
+    Date date;
+    char content[151];
+    char sender[10];
+    char receiver[10];
+public:
+    SMS(const Date &date = Date(), char *content = " ", char *sender = " ", char *receiver = " ") {
+        this->date = date;
+        strcpy(this->content, content);
+        strcpy(this->sender, sender);
+        strcpy(this->receiver, receiver);
+    }
+    void print() {
+        date.print();
+        cout <<sender << " " << receiver << " " << content << endl;
+    }
+    friend void filter(SMS messages[20], int n, Date &start);
+    int getContentLength() {
+        return strlen(content);
+    }
+};
+//referenca za da ne se povika copy const
+//ne e zadolzitelno
+void filter(SMS messages[20], int n, Date &start) {
+    int counter = 0;
+    for (int i = 0; i < n; i++) {
+        if (messages[i].getContentLength() < 70 && messages[i].date.isAfter(start)) {
+            messages[i].print();
+            counter++;
+        }
+    }
+    if (counter == 0) {
+        cout << "No date is found" << endl;
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+    SMS messages[20];
+    int day;
+    int month;
+    int year;
+    char content[151];
+    char sender[10];
+    char receiver[10];
+    for (int i = 0; i < n; i++) {
+        cin >> day >> month >> year >> sender >> receiver;
+        cin.ignore();
+        cin.getline(content, 151);
+        messages[i] = SMS(Date(day, month, year), content, sender, receiver);
+    }
+    cin >> day >> month >> year;
+    Date start(day, month, year);
+    filter(messages, n, start);
+
+}
