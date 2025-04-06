@@ -1,0 +1,189 @@
+Во рамките на една видео игра се чуваат податоци за кориснички профили (UserProfile) и нивните достигнувања во играта (Achievement). 
+Вие треба да ги дефинирате класите и функциите за коректна имплементација на системот. Не го менувајте дадениот код.
+За таа цел, дефинирајте класа Achievement со приватни податочни членки:
+
+    name - име на достигнувањето (низа од знаци);
+    description - опис на достигнувањето (низа од знаци);
+    totalUserAchievements - вкупен број на достигнувања на сите кориснички профили (static int).
+
+Дополнете ја класата со default конструктор, конструктор со аргументи и copy конструктор како и следните функции:
+
+    print - функција која ги печати името и описот на достигнувањето во нов ред;
+    incrementTotalUserAchievements - функција која ја зголемува вредноста на totalUserAchievements за 1.
+
+Потребно е да работите без get/set методи.
+
+Понатаму, дефинирајте класа UserProfile со приватни податочни членки:
+
+    name - име на профилот (низа од знаци);
+    achievements - низа од добиени достигнувања на корисникот за дадената игра (максимална големина е 50);
+    n - број на добиени достигнувања на корисникот за дадената игра (иницијално поставен на 0).
+
+Дополнете ја класата со default конструктор и конструктор со аргумент name.
+Напишете ги функциите:
+
+    print - функција која го печати името на корисникот и неговите добиени достигнувања во играта во формат даден во тест примерите.
+    void addAchievement(const Achievement& achievement) - функција која во низата од достигнувања achievements го додава достигнувањето achievement и ја зголемува вредноста на totalUserAchievements.
+На крај, да се напише функција void showAchievementsProgress(UserProfile profiles[], int n, Achievement achievements[], int m) која директно пристапува до приватните членки на класите Achievement и UserProfile, 
+и за секое достигнување во играта на екран ќе ги испечати името и описот на достигнувањето, како и процентот на корисници кои го добиле тоа достигнување. На крај да се испечати просечниот број на добиени достигнувања со формулата totalUserAchievements * 100.0 / (n * m). 
+Форматот на печатењето е даден во тест примерите.
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class UserProfile;
+
+class Achievement {
+private:
+    char name[50];
+    char description[50];
+    static int totalUserAchievements;
+    friend class UserProfile;
+public:
+    Achievement() {}
+
+    Achievement(const char *name, const char *description) {
+        strcpy(this->name, name);
+        strcpy(this->description, description);
+        totalUserAchievements++;
+    }
+
+    Achievement(const Achievement &a) {
+        strcpy(this->name, a.name);
+        strcpy(this->description, a.description);
+        totalUserAchievements++;
+    }
+
+    void print() const {
+        cout << "Achievement Name: " << name << endl;
+        cout << "Description: " << description << endl;
+    }
+
+    static void incrementTotalUserAchievements() {
+        totalUserAchievements++;
+    }
+
+    static int getTotalUserAchievements() {
+        return totalUserAchievements;
+    }
+};
+
+int Achievement::totalUserAchievements = 0;
+
+class UserProfile {
+private:
+    char name[50];
+    Achievement achievements[50];
+    int n;
+    friend class Achievement;
+
+public:
+    UserProfile() : n(0) {}
+
+    UserProfile(const char *name) {
+        strcpy(this->name, name);
+        n = 0;
+    }
+
+    void print() const {
+        cout << "User Profile: " << name << endl;
+        for (int i = 0; i < n; i++) {
+            achievements[i].print();
+        }
+    }
+
+    void addAchievement(const Achievement &achievement) {
+        if (n < 50) {
+            achievements[n] = achievement;
+            n++;
+            achievement.incrementTotalUserAchievements();
+        }
+    }
+
+    void showAchievementsProgress(UserProfile profiles[], int n, Achievement achievements[], int m) {
+        int totalAchievements = 0;
+        if (n == 0 || m == 0) {
+            cout << "No users or achievements to calculate progress." << endl;
+            return;
+        }
+
+        for (int i = 0; i < m; i++) {
+            int usersWithAchievement = 0;
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < profiles[j].n; k++) {
+                    if (strcmp(profiles[j].achievements[k].name, achievements[i].name) == 0) {
+                        usersWithAchievement++;
+                        break;
+                    }
+                }
+            }
+
+            double percentage = (usersWithAchievement * 100.0) / n;
+            cout << "Achievement: " << achievements[i].name << endl;
+            cout << "Description: " << achievements[i].description << endl;
+            cout << "Percentage of users with this achievement: " << percentage << "%" << endl;
+
+            totalAchievements += usersWithAchievement;
+        }
+        double averageAchievements = totalAchievements * 100.0 / (n * m);
+        cout << "Average achievements per user: " << averageAchievements << "%" << endl;
+    }
+
+};
+
+int main() {
+    char testcase[100];
+    cin.getline(testcase, 100);
+
+    int n;
+    cin >> n;
+    cin.ignore();
+
+    UserProfile users[100];
+    for (int i = 0; i < n; ++i) {
+        char name[100];
+        cin.getline(name, 100);  // Use getline to avoid issues with cin >> name
+        users[i] = UserProfile(name);
+    }
+
+    int m;
+    cin >> m;
+    cin.ignore();
+
+    Achievement achievements[100];
+    for (int i = 0; i < m; ++i) {
+        char name[100], description[100];
+        cin.getline(name, 100);  // Read the name of the achievement
+        cin.getline(description, 100);  // Read the description of the achievement
+        achievements[i] = Achievement(name, description);
+    }
+
+    int k;
+    cin >> k;
+    cin.ignore();
+
+    for (int i = 0; i < k; ++i) {
+        int numUser, numAchievement;
+        cin >> numUser >> numAchievement;
+        numUser -= 1;  // Adjust for zero-indexing
+        numAchievement -= 1;  // Adjust for zero-indexing
+        users[numUser].addAchievement(achievements[numAchievement]);
+    }
+
+    // Based on testcase, perform the relevant tests
+    if (testcase[8] == 'A') {  // Testing Achievement methods.
+        for (int i = 0; i < m; ++i) {
+            achievements[i].print();
+        }
+    } else if (testcase[8] == 'U') {  // Testing UserProfile methods.
+        for (int i = 0; i < n; ++i) {
+            users[i].print();
+        }
+    } else {  // Testing showAchievementsProgress function.
+        users[0].showAchievementsProgress(users, n, achievements, m);
+    }
+
+    return 0;
+}
+
