@@ -1,0 +1,110 @@
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+enum TYPEOFSONG {
+    POP,
+    RAP,
+    ROCK
+};
+
+class Pesna {
+    char name[20];
+    float minutes;
+    TYPEOFSONG type;
+    friend class CD;
+public:
+    Pesna() {}
+    Pesna(const char *name, float min, int type1) {
+        strcpy(this->name, name);
+        this->minutes = min;
+        type = (TYPEOFSONG)type1;
+    }
+    void print() {
+        cout << "\" " << name << "\" " << minutes << " minutes" << endl;
+    }
+    float getLen() {
+        return minutes;
+    }
+};
+class CD {
+    Pesna pesni[10];
+    int n;
+    float length;
+public:
+    CD(int nB = 0, float len = 0.0) {
+        this->n = nB;
+        this->length = len;
+    }
+    // void addSong(Pesna p) {
+    //     int total = 0;
+    //     for (int i = 0; i < n; i++) {
+    //         total += pesni[i].getLen();
+    //     }
+    //     total += p.getLen();
+    //     if (n > 10 || total > this->length) {
+    //         return;
+    //     }
+    //     pesni[n] = p;
+    //     n++;
+    // }
+    void printSongByType(TYPEOFSONG t) {
+        for (int i = 0; i < n; i++) {
+            if (pesni[i].type == t) {
+                pesni[i].print();
+            }
+        }
+    }
+    void dodadiPodredeno(Pesna p) {
+        float total = 0;
+        for (int i = 0; i < n; i++) {
+            total += pesni[i].getLen();
+        }
+        total += p.getLen();
+        if (n > 10 || total > length) {
+            return;
+        }
+        int position = n;
+        for (int i = 0; i < n; i++) {
+            if (p.getLen() < pesni[i].getLen()) {
+                position = i;
+                break;
+            }
+        }
+        for (int i = n; i > position; i--) {
+            pesni[i] = pesni[i - 1];
+        }
+        pesni[position] = p;
+        n++;
+    }
+    void printAllSongs() {
+        for (int i = 0; i < n; i++) {
+            pesni[i].print();
+        }
+    }
+};
+
+int main() {
+    CD mojCD(0, 20.0); // Максимум 20 минути
+
+    int n;
+    cout << "Kolku pesni sakas da vneses? ";
+    cin >> n;
+
+    char ime[20];
+    float minuti;
+    int tip;
+
+    for (int i = 0; i < n; i++) {
+        cout << "Vnesi ime, minuti i tip (0=POP, 1=RAP, 2=ROCK): ";
+        cin >> ime >> minuti >> tip;
+
+        Pesna p(ime, minuti, tip);
+        mojCD.dodadiPodredeno(p);
+    }
+
+    cout << "\n--- Pesnite podredeni po dolzina ---\n";
+    mojCD.printAllSongs();
+
+    return 0;
+}
