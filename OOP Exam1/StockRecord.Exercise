@@ -1,0 +1,126 @@
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+class StockRecord {
+    char id[12];
+    char nameOfCompany[50];
+    float priceWithDiscount;
+    float regularPrice;
+    int shares;
+    int static n;
+public:
+    StockRecord(const char *id = "", const char *name = "", float priceNow = 0, int sharesN = 0) {
+        strcpy(this->id, id);
+        strcpy(this->nameOfCompany, name);
+        this->priceWithDiscount = 0;
+        this->regularPrice = priceNow;
+        this->shares = shares;
+        n++;
+    }
+    ~StockRecord() {}
+    void setNewPrice(float newPrice) {
+        this->regularPrice = newPrice;
+    }
+    double value() {
+        return shares * regularPrice;
+    }
+    double profit() {
+        return shares *(regularPrice - priceWithDiscount);
+    }
+    void print() {
+        cout << nameOfCompany << " " << shares << " "
+             << priceWithDiscount << " " << regularPrice << " "
+             << profit() << endl;
+    }
+    static int getNumber() {
+        return n;
+    }
+};
+int StockRecord::n = 0;
+class Client {
+    char nameOfClient[50];
+    int id;
+    StockRecord shares[10];
+    int numShares;
+    static int numObjects;
+    public:
+    Client(const char *name = "", int iD = 0, int n = 0) {
+        strcpy(this->nameOfClient, name);
+        this->id = iD;
+        this->numShares = n;
+        for (int i = 0; i < numShares; i++) {
+            this->shares[i] = StockRecord();
+        }
+        numObjects++;
+    }
+    void addStock(const StockRecord &stock) {
+        if (numShares > 10) {
+            return;
+        }
+        shares[numShares] = stock;
+        numShares++;
+    }
+    double totalValue() {
+        double total = 0.0;
+        for (int i = 0; i < numShares; i++) {
+            total += shares[i].value();
+        }
+        return total;
+    }
+    void printPortfolio() {
+        cout << "Vkupna vrednost na portfolioto na " << id << endl;
+        cout << totalValue() << endl;
+        for (int i = 0; i < numShares; i++) {
+            shares[i].print();
+        }
+    }
+    static int getNumObjects() {
+        return numObjects;
+    }
+};
+int Client::numObjects = 0;
+int main() {
+    int test;
+    cin >> test;
+
+    if (test == 1) {
+        double price;
+        cout << "=====TEST NA KLASATA StockRecord=====" << endl;
+        StockRecord sr("1", "Microsoft", 60.0, 100);
+        cout << "Konstruktor OK" << endl;
+        cin >> price;
+        sr.setNewPrice(price);
+        cout << "SET metoda OK" << endl;
+    } else if (test == 2) {
+        cout << "=====TEST NA METODITE I OPERATOR << OD KLASATA StockRecord=====" << endl;
+        char id[12], company[50];
+        double price, newPrice;
+        int n, shares;
+        cin >> n;
+        for (int i = 0; i < n; ++i) {
+            cin >> id >> company >> price >> newPrice >> shares;
+            StockRecord sr(id, company, price, shares);
+            sr.setNewPrice(newPrice);
+            cout << sr.value() << endl;
+            sr.print();
+        }
+    } else if (test == 3) {
+        cout << "=====TEST NA KLASATA Client=====" << endl;
+        char companyID[12], companyName[50], clientName[50];
+        int clientID, n, shares;
+        double oldPrice, newPrice;
+        cin >> clientName >> clientID >> n;
+        Client c(clientName, clientID);
+        cout << "Konstruktor OK" << endl;
+        for (int i = 0; i < n; ++i) {
+            cin >> companyID >> companyName >> oldPrice >> newPrice >> shares;
+            StockRecord sr(companyID, companyName, oldPrice, shares);
+            sr.setNewPrice(newPrice);
+            c.addStock(sr);
+        }
+        c.printPortfolio();
+    }
+
+    return 0;
+}
