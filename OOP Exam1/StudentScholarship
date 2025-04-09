@@ -1,0 +1,178 @@
+Енда IT компанија во Македонија сака да додели стипендии на 3ца најдобри студенти на ФИНКИ. На огласот за стипендии може да конкурираат студенти и од други факултети, но стипендиите се наменети исклучиво за студентите на ФИНКИ и тоа со проесек поголем од 9. За таа цел вие треба да и помогнете на оваа компанија за да ги најде најдобрите три студента. 
+
+Дефинирајте класа Student со следниве атрибути:
+-име (низа од карактери) 
+-презиме (низа од карактери)
+-факултет (низа од карактери)
+-просек од оцени  (float)
+-вкупен број на студенти што аплицирале (статичка променлива)
+-број на студенти што аплицирале од ФИНКИ (статичка променлива)
+За самата класа да се дефинира: default конструктор, конструктор со аргументи, деструктор, како и метода bool finkiStudent() која ќе проверува дали некој студент е од ФИНКИ и има просек поголем од 9.
+
+Дефинирајте и класа Scholarship со следниве атрибути:
+-име на компанијата која ја доделува стипендијата  (низа од карактери)
+-листа од студенти кои имаат аплицирано за стипендија 
+-средна вредност на просекот на студентите кои се од ФИНКИ со просек поголем од 9 (статичка променлива)
+Дополнително во самата класа да се дефинира: default конструктор, конструктор со аргументи, деструктор, метод за додавање на нов студент и метод за печатење на името на компанијата која ја издава стипендијата вклучувајќи го и  бројот на студенти кои имале аплицирано за таа стипендија. 
+
+Надвор од оваа класа да се дефинира функција void studentsWithScholarship(Scholarship &scholarship, int num_students) која ќе биде пријател на двете класи и ќе ги прикаже 3-цата добитници на овој тип стипендија. Освен тоа на крај оваа функција треба да ги испринта следниви основни статистички карактеристики за конкурсот:
+- колку проценти од пријавените студенти (кои исполнуваат услови) се од ФИНКИ
+- која е средната вредност на просекот на студентите кои го исполнувале условот за добивање на стипендија
+
+Забелешка: Се претпоставува дека повеќе од 3ца студенти ќе го исполнат условот за добивање на стипендија.
+НЕ го менувајте main-от!
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+//YOUR CODE HERE!
+class Scholarship;
+
+class Student {
+    char name[20];
+    char surname[20];
+    char faculty[20];
+    float grade;
+    static int numApplicants;
+    static int numApplicantFinki;
+
+    friend class Scholarship;
+    friend void studentsWithScholarship(Scholarship &scholarship, int num_students);
+
+public:
+    Student(const char *name = "", const char *surname = " ", const char *fax = "", float avg = 0) {
+        strcpy(this->name, name);
+        strcpy(this->surname, surname);
+        strcpy(this->faculty, fax);
+        this->grade = avg;
+        // numApplicants++;
+        // if ((strcmp(this->faculty, "FINKI") == 0) && (this->grade >= 9.0)) {
+        //     numApplicantFinki++;
+        // }
+    }
+
+    Student(const Student &student) {
+        strcpy(this->name, student.name);
+        strcpy(this->surname, student.surname);
+        strcpy(this->faculty, student.faculty);
+        this->grade = student.grade;
+
+    }
+    ~Student() {}
+    bool finkiStudent() const {
+        if ((strcmp(this->faculty, "FINKI") == 0) && (this->grade >= 9.0)) {
+            numApplicantFinki++;
+            return true;
+        }
+        return false;
+    }
+    static int getNumApplicants() {
+        return numApplicants;
+    }
+    static int getNumApplicantsFinki() {
+        return numApplicantFinki;
+    }
+};
+
+int Student::numApplicants = 0;
+int Student::numApplicantFinki = 0;
+
+class Scholarship {
+    char name[20];
+    Student students[100];
+    int numaddedStudents;
+
+    friend class Student;
+    friend void studentsWithScholarship(Scholarship &scholarship, int num_students);
+
+public:
+    Scholarship(const char *name = " ") {
+        strcpy(this->name, name);
+        numaddedStudents = 0;
+    }
+    ~Scholarship() {}
+    void print() {
+        cout << "Scholarship name: " << this->name << ", total applicants: " << Student::getNumApplicants() << endl;
+    }
+    void addStudent(const Student &student) {
+        if (numaddedStudents < 100) {
+            students[numaddedStudents] = student;
+            numaddedStudents++;
+        }
+        Student::numApplicants++;
+        if ((strcmp(student.faculty, "FINKI") == 0) && (student.grade >= 9.0)) {
+            Student::numApplicantFinki++;
+        }
+    }
+};
+void studentsWithScholarship(Scholarship &scholarship, int num_students) {
+    Student finkiStudents[100];
+    int count = 0;
+    float sumGrades = 0;
+
+    for (int i = 0; i < scholarship.numaddedStudents; i++) {
+        if (strcmp(scholarship.students[i].faculty, "FINKI") == 0 && scholarship.students[i].grade >= 9.0) {
+            finkiStudents[count++] = scholarship.students[i];
+            sumGrades += scholarship.students[i].grade;
+        }
+    }
+
+    // сортирај по оценка опаѓачки
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = i + 1; j < count; j++) {
+            if (finkiStudents[i].grade < finkiStudents[j].grade) {
+                Student temp = finkiStudents[i];
+                finkiStudents[i] = finkiStudents[j];
+                finkiStudents[j] = temp;
+            }
+        }
+    }
+
+    cout << "FINKI students with a scholarship" << endl;
+    for (int i = 0; i < 3 && i < count; i++) {
+        cout << finkiStudents[i].name << " " << finkiStudents[i].surname << " "
+             << finkiStudents[i].faculty << " " << finkiStudents[i].grade << endl;
+    }
+
+    float percent = (Student::getNumApplicantsFinki() * 100.0) / Student::getNumApplicants();
+    float avgGrade = (count > 0) ? sumGrades / count : 0;
+
+    cout << "Scholarship data shows that " << percent << "% of applicants are from FINKI, with an average grade of " << avgGrade << endl;
+}
+
+//DO NOT CHANGE THE MAIN FUNCTION!
+int main() {
+    char name[50], surname[50], faculty[50], scholarship_name[50];
+    float average_grade;
+    int n,case_;
+    cin>>case_;
+    if (case_ == 0)
+        //Testing Student constructor
+    {
+        cout<<"--Testing finkiStudent method--"<<endl;
+        Student s("Ana", "Denkova", "BAS", 9.89);
+        cout<<s.finkiStudent();
+    }
+    else if (case_==1){
+        //Testing addStudent and print method
+        cout<<"--Testing addStudent and print method--"<<endl;
+        Scholarship sc("ITCompany");
+        Student s("Ana", "Denkova", "BAS", 9.89);
+        sc.addStudent(s);
+        sc.print();
+    }
+    else if (case_ == 2){
+        cin>>scholarship_name;
+        Scholarship sc(scholarship_name);
+        cin>>n;
+        for(int i=0; i<n; i++)
+        {
+            cin>>name>>surname>>faculty>>average_grade;
+            Student s = Student(name, surname, faculty, average_grade);
+            sc.addStudent(s);
+        }
+        sc.print();
+        studentsWithScholarship(sc,n);
+    }
+    return 0;
+}
