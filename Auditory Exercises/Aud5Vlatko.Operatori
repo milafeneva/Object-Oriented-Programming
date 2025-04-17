@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+
+class Profile {
+    char name[50];
+    int numFriends;
+    int yearOfBirth;
+public:
+    Profile(const char *name = " ", int numFriends = 0, int yearOfBirth = 0) {
+        strcpy(this->name, name);
+        this->numFriends = numFriends;
+        this->yearOfBirth = yearOfBirth;
+    }
+    void print() {
+        cout << name << " " << numFriends << " " << yearOfBirth << endl;
+    }
+    bool operator==(const Profile &p) {
+        if (strcmp(p.name, name)==0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    bool operator>(Profile &p) {
+        return yearOfBirth > p.yearOfBirth;
+    }
+    //prefix
+    Profile& operator++() {
+        numFriends+=1;
+        return *this;
+    }
+    Profile& operator--() {
+        numFriends-=1;
+        return *this;
+    }
+    //sufix
+    Profile& operator++(int) {
+        Profile tmp = *this;
+        numFriends++;
+        return tmp;
+    }
+    Profile& operator--(int) {
+        Profile tmp = *this;
+        numFriends--;
+        return tmp;
+    }
+    Profile& operator+=(int m) {
+        numFriends+=m;
+        return *this;
+    }
+};
+
+int main() {
+    Profile p("Mila", 500, 2004);
+    p.print();
+    Profile p1("Mila", 700, 2003);
+    p1.print();
+    int a = 4;
+    int b = 6;
+    int k;
+    k = ++a;
+    if (p==p1) { cout << "Isti se" << endl; } else { cout << "Ne se isti" << endl; }
+    if (p>p1) { cout << "Pogolemo e P" << endl; } else { cout << "Ne e pogolemo p" << endl; }
+    ++p;
+    p.print();
+    Profile nov = --p;
+    p+=5;
+    p.print();
+
+}
