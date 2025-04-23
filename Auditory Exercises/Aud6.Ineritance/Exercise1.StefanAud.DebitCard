@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+#include <ostream>
+using namespace std;
+
+
+class DebitCard {
+protected:
+    string owner;
+    string accNum;
+    double balance;
+public:
+    DebitCard(const string &owner = "Mila", const string &acc_num = "123123123123123", double balance = 50000)
+        : owner(owner),
+          accNum(acc_num),
+          balance(balance) {
+    }
+    void print()  {
+        cout << "Card for user " << owner << " with account number " << accNum << " has balance " << balance << endl;
+    }
+    bool deposit(double amount) {
+        balance += amount;
+        return true;
+    }
+    bool withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+class StudentMealCard : public DebitCard {
+private:
+    static int WEEKLY_ALL;
+    static int DAILY_ALL;
+public:
+    StudentMealCard(const string &owner = "Mila", const string &acc_num = "123123123123123", double balance = 50000) : DebitCard(owner, acc_num, balance) {
+
+    }
+    void print()  {
+        DebitCard::print();
+    }
+    bool deposit(double amount) {
+        if (amount > WEEKLY_ALL) {
+            return false;
+        } else {
+            if ((int)amount%DAILY_ALL != 0) {
+                return false;
+            }
+            balance = amount;
+            return true;
+        }
+    }
+    bool withdraw(double amount) {
+        return DebitCard::withdraw(amount);
+    }
+};
+int StudentMealCard::WEEKLY_ALL = 840;
+int StudentMealCard::DAILY_ALL = 140;
+
+int main() {
+    DebitCard dc;
+    dc.print();
+    StudentMealCard smc;
+    char op;
+    double amount;
+    while (cin >> op >> amount) {
+        if (op == '+') {
+            smc.deposit(amount);
+        } else  {
+            smc.withdraw(amount);
+        }
+        smc.print();
+    }
+
+}
