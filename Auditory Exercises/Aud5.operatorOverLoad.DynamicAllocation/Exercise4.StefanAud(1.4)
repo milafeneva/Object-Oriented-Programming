@@ -1,0 +1,116 @@
+#include <iostream>
+#include <cstring>
+#include <ostream>
+using namespace std;
+
+
+class Student {
+    int id;
+    char *name;
+    int *grades;
+    int capacity;
+    int n;
+    //sekogas da imame n koga imame dinam alocirana niza broevi
+    void copy(const Student& s) {
+        this->id = s.id;
+        this->n = s.n;
+        this->capacity = s.capacity;
+        this->name = new char[strlen(s.name)+1];
+        strcpy(this->name, s.name);
+        this->grades = new int[s.n];
+        for (int i = 0; i < n; i++) {
+            this->grades[i] = s.grades[i];
+        }
+    }
+public:
+    Student(int id = 241073, char *name = "Mila Feneva") {
+        this->id = id;
+        this->name = new char[strlen(name)+1];
+        strcpy(this->name, name);
+        this->capacity = 10;
+        this->grades = new int[capacity];
+        this->n = 0;
+    }
+    Student (const Student& s) {
+        copy(s);
+    }
+    ~Student() {
+        delete [] name;
+        delete [] grades;
+    }
+    Student& operator=(const Student& s) {
+        if (this != &s) {
+            delete [] name;
+            delete [] grades;
+            copy(s);
+        }
+        return *this;
+    }
+    Student& operator+=(int grade) {
+        if(n == capacity) {
+            //TODO extend the grades array
+            int *tmp = new int[2*capacity];
+            for (int i = 0; i < n; i++) {
+                tmp[i] = grades[i];
+            }
+            delete [] grades;
+            grades = tmp;
+            capacity *= 2;
+        }
+        grades[n] = grade;
+        n++;
+        return *this;
+    }
+    double average() const {
+        double sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += grades[i];
+        }
+        return sum / n;
+    }
+    friend ostream & operator<<(ostream &os, const Student &obj) {
+        os << obj.id << " " << obj.name << " " << obj.n <<  " " << " " << obj.average() << endl;
+        return os;
+    }
+};
+class Faculty {
+    Student *students;
+    int n;
+public:
+    Faculty() {
+        n = 0;
+        students = new Student[n];
+    }
+    Faculty & operator +=(const Student &s) {
+        Student *tmp = new Student[n+1];
+        for (int i = 0; i < n; i++) {
+            tmp[i] = students[i];
+        }
+        tmp[n] = s;
+        n++;
+        delete [] students;
+        students = tmp;
+        return *this;
+    }
+    friend ostream & operator<<(ostream &os, const Faculty &obj) {
+        for (int i = 0; i < obj.n; i++) {
+            os << obj.students[i] << " ";
+        }
+        return os;
+    }
+};
+int main() {
+    Student s; //default
+    for (int i = 0; i < 40; i++) {
+        s+=(i%6+5);
+        // cout << s;
+    }
+    Student s2;
+    for (int i = 0; i < 18; i++) {
+        s2 += (i%3+8);
+    }
+    Faculty fax;
+    fax+=s;
+    fax+=s2;
+    cout << fax << endl;
+}
