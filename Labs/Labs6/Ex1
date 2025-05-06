@@ -50,7 +50,6 @@ Expected
 208 - 264 euros has a jacuzzi
 
 #include <iostream>
-#include <cstring>
 using namespace std;
 
 class Room {
@@ -62,64 +61,73 @@ public:
         this->n = n;
         this->price = price;
     }
-    Room(const Room &r) {
-        this->n = r.n;
-        this->price = r.price;
+    Room(const Room& other) {
+        this->n = other.n;
+        this->price = other.price;
     }
-    Room &operator=(const Room &r) {
-        if (this != &r) {
-            this->n = r.n;
-            this->price = r.price;
+    Room& operator=(const Room& other) {
+        if (this != &other) {
+            this->n = other.n;
+            this->price = other.price;
         }
         return *this;
     }
-    virtual int getPrice() const {
+    virtual int getPrice() {
         return this->price;
     }
-    virtual void print() const {
-        cout << n << " - " << getPrice() << " euros" << endl;
+    virtual void print() {
+        cout << this->n << " - " << getPrice() << " euros " << endl;
     }
 };
 class StandardRoom : public Room {
-private:
     bool hasBalcony;
-public:
+    public:
     StandardRoom(int n = 0, int price = 0, bool hasBalcony = false) : Room(n, price) {
         this->hasBalcony = hasBalcony;
     }
+    StandardRoom(const StandardRoom& other) : Room(other) {
+        this->hasBalcony = other.hasBalcony;
+    }
+    StandardRoom& operator=(const StandardRoom& other) {
+        if (this != &other) {
+            Room::operator=(other);
+            this->hasBalcony = other.hasBalcony;
+        }
+        return *this;
+    }
     int getPrice() {
         if (hasBalcony) {
-            return price - (price * 5 / 100);
-        } else {
-            return price;
-        }
-    }
-    void print()  {
-        if (hasBalcony) {
-            cout << n << " - " << getPrice() << " euros has a balcony" << endl;
-        } else {
-            cout << n << " - " << getPrice() << " euros without balcony" << endl;
-        }
-    }
-};
-class LuxuryRoom : public Room {
-private:
-    bool hasJacuzzi;
-public:
-    LuxuryRoom(int n = 0, int price = 0, bool hasJacuzzi = false) : Room(n, price) {
-        this->hasJacuzzi = hasJacuzzi;
-    }
-    int getPrice() const {
-        if (hasJacuzzi) {
-            return price - (price * 20 / 100);
+            return Room::getPrice()*0.95;
         }
         return price;
     }
     void print() {
-        if (hasJacuzzi) {
-            cout << n << " - " << getPrice() << " euros has a jacuzzi" << endl;
+        cout << this->n << " - " << getPrice() << " euros";
+        if (hasBalcony) {
+            cout << " has balcony" << endl;
         } else {
-            cout << n << " - " << getPrice() << " euros without jacuzzi" << endl;
+            cout << " without balcony" << endl;
+        }
+    }
+};
+class LuxuryRoom : public Room {
+    bool hasJacuzzi;
+    public:
+    LuxuryRoom(int n = 0, int price = 0, bool hasJ = false) : Room(n, price) {
+        this->hasJacuzzi = hasJ;
+    }
+    int getPrice() {
+        if (hasJacuzzi) {
+            return Room::getPrice()*1.2;
+        }
+        return price;
+    }
+    void print() {
+        cout << this->n << " - " << getPrice() << " euros";
+        if (hasJacuzzi) {
+            cout << " has a jacuzzi" << endl;
+        } else {
+            cout << " without jacuzzi" << endl;
         }
     }
 };
