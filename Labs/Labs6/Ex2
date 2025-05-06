@@ -99,585 +99,102 @@ Meryl_Streep - USA
 Average rating: 9.5
 Movies this year: 4
 Total earnings: 120
-Rating: 74.59
-Oscar Rating: 96.58
-New Rating: 74.59
--------------------------
 
-mila
-m026447
-Invisible
-
-bb — Yesterday at 10:25
-da ne beshe nekoj od sabajle na labs oop
-aki — Yesterday at 12:06
-moze li nekoj sto bil na labs sabajle oop da gi kaze zadacite
-groma — Yesterday at 12:27
-labs denes ?
-Fuantei — Yesterday at 12:47
-ova nedela labs za sho ke se
-za apstraktni klasi ili?
-blueberry — Yesterday at 12:49
-Ne be nema labs za apstraktni uste
-mislam rano e za toa
-aki — Yesterday at 13:32
-moze nekoj da kaze sto imase?
-Fuantei — Yesterday at 13:34
-abe deka denes zedovme bukvalno
-apstraktni klasii prazna virtuelna funkcija
-i povekekratno nasleduvanje
-znachi ova nedela ke e za polimorfizam ili?
-blueberry — Yesterday at 14:03
-bi trebalo
-groma — Yesterday at 14:08
-nekoj da pustit sho imase ?
-Booker3010 — Yesterday at 14:37
-tie so minete kval bez zeleni zadaci kazete malku tips and tricks i nie obicnite smrtnici da pomineme ;))
-blueberry — Yesterday at 14:54
-pisuvaj konstruktor 2 vo 1 stefan kako so pisuva mesto 3 posebni oti moes vo edniot od trite na primer da zaboravis vrednost na 0 da setiras..jas taka padnav
-Booker3010 — Yesterday at 14:55
-abe konstruktor mozebi nauciv da pravam
-ama da se lizam na asistenti za da pominam bez zelena, ne nauciv
-:))
-NacMac — Yesterday at 14:56
-dzabe ti e i da naucis, nikoj taka ne pominal 🙂
-Booker3010 — Yesterday at 14:57
-pa ne znam bash
-blueberry — Yesterday at 14:57
-moze pomos malce?
 #include <iostream>
-#include <cstring>
+#include <string.h>
 using namespace std;
 
-class Nedviznina {
+class MovieActor {
 protected:
-Expand
-message.txt
-3 KB
-Image
-nalseudvanje labsot
-ne mi premsetuva tocen danok
-diiaanaa — Yesterday at 15:24
-Formulata kaj danok na imot treba da e 
-Cena()*(5+danok)/100.0
-blueberry — Yesterday at 15:24
-fala
-ninja — Yesterday at 15:31
-Лабораториска вежба 7 - понеделник:
-1) Потребно е да дизајнирате програма за систем за хотелски резервации. За таа цел потребно е да изработите класа Room која што ќе ги има следните информации:
-
-    број на соба - цел број
-    цена за ноќевање - цел број
-
-За оваа класа потребно е да креирате:
-
-    Default конструктор
-    Конструктор со параметри
-    Copy конструктор
-    Оператор =
-    Функција која што ја враќа цената за едно ноќевање (getPrice)
-    Функција print што ги печати информациите за собата во формат:
-    [број на соба] - [цена за ноќевање] euros
-
-Понатаму, треба да креирате класа StandardRoom. Класата треба да наследува од класата Room и дополнително да ги има следниве информации:
-
-    hasBalcony  - bool променлива 
-За оваа класа потребно е да креирате:
-
-    Default конструктор
-    Конструктор со параметри
-    Функција што ја враќа цената за едно ноќевање (getPrice) која што се пресметува така што доколку собата има балкон, се одзема 5% од цената што ја добивате од класата Room. Доколку собата нема балкон,цената за едно ноќевање е онаа што ја добивате од класата Room. Пример, доколку цената за ноќевање што ја добивате од класата Room е 60 евра и собата има балкон, тогаш овде функцијата треба да врати 57 евра затоа што 60 - 60 0.05 = 57.
-    Функција print што ги печати информациите за собата во формат:   [број на соба] - [цена за ноќевање] euros.  Доколку има балкон додадете 'has a balcony', доколку нема балкон додадете 'without balcony'.
-
-Понатаму, треба да креирате класа LuxuryRoom која треба да наследува од класата Room и дополнително да ги има следниве информации:
-
-    hasJacuzzi - bool променлива
-
-За оваа класа потребно е да креирате:
-
-    Default конструктор
-    Конструктор со параметри
-    Функција што ја враќа цената за едно ноќевање (getPrice) која што се пресметува така што доколку собата има џакузи, се додава 20% од цената што ја добивате од класата Room.Доколку собата нема џакузи,цената за едно ноќевање е онаа што ја добивате од класата Room.Пример, доколку цената за ноќевање што ја добивате од класата Room е 60 евра и собата има џакузи, тогаш овде функцијата треба да врати 72 евра затоа што 60 + 600.2 = 72.
-    Функција print што ги печати информациите за собата во формат:    [број на соба] - [цена за ноќевање] euros. Доколку има џакузи додадете 'has a jacuzzi', доколку нема додадете 'without jacuzzi'.
-Input
-4
-5
-Standard 204 120 1
-Luxury 205 180 1
-Room 206 100
-Standard 207 130 0
-Luxury 208 220 1
-
-Expected
-204 - 114 euros has a balcony
-205 - 216 euros has a jacuzzi
-206 - 100 euros
-207 - 130 euros without balcony
-208 - 264 euros has a jacuzzi
-Mainot од првата:
-int main() {
-    int testCase;
-    cin >> testCase;
-
-    if (testCase == 1) {
-        // Test Room class
-        int number, price;
-        cin >> number >> price;
-        Room r1(number, price);
-        Room r2 = r1;  // Copy constructor
-        Room r3;
-        r3 = r1;       // Assignment operator
-
-        r1.print();
-        r2.print();
-        r3.print();
-    }
-    else if (testCase == 2) {
-        // Test StandardRoom
-        int number, price;
-        bool hasBalcony;
-        cin >> number >> price >> hasBalcony;
-
-        StandardRoom sr(number, price, hasBalcony);
-        sr.print();
-    }
-    else if (testCase == 3) {
-        // Test LuxuryRoom
-        int number, price;
-        bool hasJacuzzi;
-        cin >> number >> price >> hasJacuzzi;
-
-        LuxuryRoom lr(number, price, hasJacuzzi);
-        lr.print();
-    }
-    else if (testCase == 4) {
-        // Polymorphism test
-        int n;
-        cin >> n;
-        Room* rooms[100];
-
-        for (int i = 0; i < n; ++i) {
-            string type;
-            cin >> type;
-
-            int number, price;
-            cin >> number >> price;
-
-            if (type == "Standard") {
-                bool hasBalcony;
-                cin >> hasBalcony;
-                rooms[i] = new StandardRoom(number, price, hasBalcony);
-            } else if (type == "Luxury") {
-                bool hasJacuzzi;
-                cin >> hasJacuzzi;
-                rooms[i] = new LuxuryRoom(number, price, hasJacuzzi);
-            } else {
-                rooms[i] = new Room(number, price);
-            }
-        }
-
-        for (int i = 0; i < n; ++i) {
-            rooms[i]->print();
-        }
-
-        for (int i = 0; i < n; ++i) {
-            delete rooms[i];
-        }
-    }
-
-    return 0;
-}
-F_ili_P — Yesterday at 15:33
-Respect bratu
-Us vtorata ak ja imas top
-ninja — Yesterday at 15:33
-2) Да се дефинира класа MovieActor за која ќе се чуваат:
-
-    динамички алоцирана низа од карактери за името на актерот
-    низа од максимум 40 карактери за државата од која потекнува
-    просечна оцена на филмовите во кои глумел актерот годинава (double)
-    вкупен број на филмови годинава (int)
-    вкупна заработка од тие филмови во милиони долари (double)
-
-За потребите на класата да се дефинираат:
-
-    default конструктор и конструктор со аргументи
-    copy constructor и оператор =
-    деструктор
-    метод rating() кој го враќа рејтингот на актерот пресметан како:
-
-    (просечнаоценка * 0.4) + (бројнафилмови * 0.2) + (заработка * 0.4)
-
-    метод print() кој ги печати податоците во следниот формат:
-
-    [Име] - [држава]
-    Average rating: [просечна оцена]
-    Movies this year: [вкупен број]
-    Total earnings: [вкупна заработка]
-    Rating: [рејтинг]
-
-Од MovieActor да се изведе класа OscarWinner за која дополнително ќе се чуваат:
-
-    просечна оцена на филмовите по добиениот Оскар (double)
-    број на филмови по добиениот Оскар (int)
-    вкупна заработка од тие филмови (double)
-
-За потребите на класата да се дефинираат:
-
-    default конструктор
-    конструктор кој прима објект од MovieActor и плус дополнителните информации
-    конструктор кој ги прима сите аргументи (видете main)
-    copy constructor, оператор =, деструктор
-    метод oscarRating() кој го враќа рејтингот од пост-Оскар филмовите:
-
-    (пост-оскарпросечнаоценка * 0.6) + (пост-оскарбројнафилмови * 0.1) + (пост-оскар_заработка * 0.3)
-
-Да се препокријат методите:
-
-    rating() кој враќа просек од основниот и oscar рејтинг
-    print() кој покрај основните информации за актерот печати и:
-
-    Oscar Rating: [рејтинг]
-    New Rating: [просечниот]
-Input
-2
-3
-Leonardo_DiCaprio USA 8.5 3 150.0
-9.2 4 200.0
-Tom_Hanks USA 9.0 5 200.0
-9.5 6 250.0
-Meryl_Streep USA 9.5 4 120.0
-9.8 7 300.0
-
-Expected
-MOVIE ACTORS:
-=====================================
-Leonardo_DiCaprio - USA
-Average rating: 8.5
-Movies this year: 3
-Total earnings: 150
-Rating: 64
--------------------------
-Tom_Hanks - USA
-Average rating: 9
-Movies this year: 5
-Total earnings: 200
-Rating: 84.6
--------------------------
-Meryl_Streep - USA
-Average rating: 9.5
-Movies this year: 4
-Total earnings: 120
-Rating: 52.6
--------------------------
-OSCAR WINNERS:
-=====================================
-Leonardo_DiCaprio - USA
-Average rating: 8.5
-Movies this year: 3
-Total earnings: 150
-Rating: 64.96
-Oscar Rating: 65.92
-New Rating: 64.96
--------------------------
-Tom_Hanks - USA
-Average rating: 9
-Movies this year: 5
-Total earnings: 200
-Rating: 82.95
-Oscar Rating: 81.3
-New Rating: 82.95
--------------------------
-Meryl_Streep - USA
-Average rating: 9.5
-Movies this year: 4
-Total earnings: 120
-Rating: 74.59
-Oscar Rating: 96.58
-New Rating: 74.59
--------------------------
-Mainot od vtorata:
-int main() {
-    char name[100];
-    char country[41];
-    double avg_rating;
-    int num_movies;
-    double earnings;
-    double post_avg_rating;
-    int post_num_movies;
-    double post_earnings;
-
+    char *name;
+    char country[40];
+    double average;
     int n;
-    cin >> n;
-
-    if (n == 1) {
-        // Test MovieActor basic functionality
-        cout << "MOVIE ACTORS:" << endl;
-        cout << "=====================================" << endl;
-        int numActors;
-        cin >> numActors;
-
-        MovieActor* actors = new MovieActor[numActors];
-
-        for (int i = 0; i < numActors; ++i) {
-            cin >> name >> country >> avg_rating >> num_movies >> earnings;
-            actors[i] = MovieActor(name, country, avg_rating, num_movies, earnings);
-            actors[i].print();
-            cout << "-------------------------" << endl;
-        }
-
-        delete[] actors;
-    }
-    else if (n == 2) {
-        // Test MovieActor and create OscarWinner from it
-        int numActors;
-        cin >> numActors;
-
-        MovieActor* actors = new MovieActor[numActors];
-        OscarWinner* oscarWinners = new OscarWinner[numActors];
-for (int i = 0; i < numActors; ++i) {
-            cin >> name >> country >> avg_rating >> num_movies >> earnings;
-            cin >> post_avg_rating >> post_num_movies >> post_earnings;
-
-            actors[i] = MovieActor(name, country, avg_rating, num_movies, earnings);
-            oscarWinners[i] = OscarWinner(actors[i], post_avg_rating, post_num_movies, post_earnings);
-        }
-
-        cout << "MOVIE ACTORS:" << endl;
-        cout << "=====================================" << endl;
-        for (int i = 0; i < numActors; ++i) {
-            actors[i].print();
-            cout << "-------------------------" << endl;
-        }
-
-        cout << "OSCAR WINNERS:" << endl;
-        cout << "=====================================" << endl;
-        for (int i = 0; i < numActors; ++i) {
-            oscarWinners[i].print();
-            cout << "-------------------------" << endl;
-        }
-
-        delete[] actors;
-        delete[] oscarWinners;
-    }
-    else if (n == 3) {
-        // Test OscarWinner with all arguments constructor
-        int numWinners;
-        cin >> numWinners;
-
-        OscarWinner* oscarWinners = new OscarWinner[numWinners];
-
-        for (int i = 0; i < numWinners; ++i) {
-            cin >> name >> country >> avg_rating >> num_movies >> earnings;
-            cin >> post_avg_rating >> post_num_movies >> post_earnings;
-
-            oscarWinners[i] = OscarWinner(name, country, avg_rating, num_movies, earnings,
-                                          post_avg_rating, post_num_movies, post_earnings);
-        }
-
-        cout << "OSCAR WINNERS:" << endl;
-        cout << "=====================================" << endl;
-        for (int i = 0; i < numWinners; ++i) {
-            oscarWinners[i].print();
-            cout << "-------------------------" << endl;
-        }
-delete[] oscarWinners;
-    }
-    else if (n == 4) {
-        // Test copy constructor and operator= for MovieActor
-        MovieActor actor1;
-        cin >> name >> country >> avg_rating >> num_movies >> earnings;
-        actor1 = MovieActor(name, country, avg_rating, num_movies, earnings);
-
-        MovieActor actor2(actor1); // Using copy constructor
-        MovieActor actor3;
-        actor3 = actor1;           // Using operator=
-
-        cout << "ORIGINAL:" << endl;
-        actor1.print();
-        cout << "-------------------------" << endl;
-
-        cout << "COPY CONSTRUCTOR:" << endl;
-        actor2.print();
-        cout << "-------------------------" << endl;
-
-        cout << "OPERATOR=:" << endl;
-        actor3.print();
-        cout << "-------------------------" << endl;
-    }
-    else if (n == 5) {
-        // Test copy constructor and operator= for OscarWinner
-        OscarWinner winner1;
-        cin >> name >> country >> avg_rating >> num_movies >> earnings;
-        cin >> post_avg_rating >> post_num_movies >> post_earnings;
-
-        winner1 = OscarWinner(name, country, avg_rating, num_movies, earnings,
-                              post_avg_rating, post_num_movies, post_earnings);
-
-        OscarWinner winner2(winner1); // Using copy constructor
-        OscarWinner winner3;
-        winner3 = winner1;            // Using operator=
-
-        cout << "ORIGINAL:" << endl;
-        winner1.print();
-        cout << "-------------------------" << endl;
-
-        cout << "COPY CONSTRUCTOR:" << endl;
-        winner2.print();
-        cout << "-------------------------" << endl;
-
-        cout << "OPERATOR=:" << endl;
-        winner3.print();
-        cout << "-------------------------" << endl;
-    }
-
-    return 0;
-}
-Mainot od vtorata (text file edition)
-int main() {
-    char name[100];
-    char country[41];
-    double avg_rating;
-    int num_movies;
     double earnings;
-    double post_avg_rating;
-    int post_num_movies;
-    double post_earnings;
-
-    int n;
-    cin >> n;
-
-    if (n == 1) {
-        // Test MovieActor basic functionality
-        cout << "MOVIE ACTORS:" << endl;
-        cout << "=====================================" << endl;
-        int numActors;
-        cin >> numActors;
-
-        MovieActor* actors = new MovieActor[numActors];
-
-        for (int i = 0; i < numActors; ++i) {
-            cin >> name >> country >> avg_rating >> num_movies >> earnings;
-            actors[i] = MovieActor(name, country, avg_rating, num_movies, earnings);
-            actors[i].print();
-            cout << "-------------------------" << endl;
-        }
-
-        delete[] actors;
+    void copy(const MovieActor& other) {
+        this->name = new char[strlen(other.name) + 1];
+        strcpy(this->name, other.name);
+        strcpy(this->country, other.country);
+        this->average = other.average;
+        this->n = other.n;
+        this->earnings = other.earnings;
     }
-    else if (n == 2) {
-        // Test MovieActor and create OscarWinner from it
-        int numActors;
-        cin >> numActors;
-
-        MovieActor* actors = new MovieActor[numActors];
-        OscarWinner* oscarWinners = new OscarWinner[numActors];
-
-        for (int i = 0; i < numActors; ++i) {
-            cin >> name >> country >> avg_rating >> num_movies >> earnings;
-            cin >> post_avg_rating >> post_num_movies >> post_earnings;
-
-            actors[i] = MovieActor(name, country, avg_rating, num_movies, earnings);
-            oscarWinners[i] = OscarWinner(actors[i], post_avg_rating, post_num_movies, post_earnings);
-        }
-
-        cout << "MOVIE ACTORS:" << endl;
-        cout << "=====================================" << endl;
-        for (int i = 0; i < numActors; ++i) {
-            actors[i].print();
-            cout << "-------------------------" << endl;
-        }
-
-        cout << "OSCAR WINNERS:" << endl;
-        cout << "=====================================" << endl;
-        for (int i = 0; i < numActors; ++i) {
-            oscarWinners[i].print();
-            cout << "-------------------------" << endl;
-        }
-
-        delete[] actors;
-        delete[] oscarWinners;
+    public:
+    MovieActor(char *name = " ", char *country = " ", double avg = 0, int n = 0, double earnings = 0) {
+        this->name = new char[strlen(name) + 1];
+        strcpy(this->name, name);
+        strcpy(this->country, country);
+        this->average = avg;
+        this->n = n;
+        this->earnings = earnings;
     }
-    else if (n == 3) {
-        // Test OscarWinner with all arguments constructor
-        int numWinners;
-        cin >> numWinners;
-
-        OscarWinner* oscarWinners = new OscarWinner[numWinners];
-
-        for (int i = 0; i < numWinners; ++i) {
-            cin >> name >> country >> avg_rating >> num_movies >> earnings;
-            cin >> post_avg_rating >> post_num_movies >> post_earnings;
-
-            oscarWinners[i] = OscarWinner(name, country, avg_rating, num_movies, earnings,
-                                          post_avg_rating, post_num_movies, post_earnings);
-        }
-
-        cout << "OSCAR WINNERS:" << endl;
-        cout << "=====================================" << endl;
-        for (int i = 0; i < numWinners; ++i) {
-            oscarWinners[i].print();
-            cout << "-------------------------" << endl;
-        }
-
-        delete[] oscarWinners;
+    MovieActor(const MovieActor& other) {
+        copy(other);
     }
-    else if (n == 4) {
-        // Test copy constructor and operator= for MovieActor
-        MovieActor actor1;
-        cin >> name >> country >> avg_rating >> num_movies >> earnings;
-        actor1 = MovieActor(name, country, avg_rating, num_movies, earnings);
-
-        MovieActor actor2(actor1); // Using copy constructor
-        MovieActor actor3;
-        actor3 = actor1;           // Using operator=
-
-        cout << "ORIGINAL:" << endl;
-        actor1.print();
-... (38 lines left)
-Collapse
-message.txt
-5 KB
-Piano Man — Yesterday at 15:58
-Car carosan
-NikolA — Yesterday at 16:44
-Dve zadachki se samo?
-ninja — Yesterday at 16:55
-Yup
-tine — Yesterday at 17:12
-Колку е мин за полагање втор кол?
-prizemen — Yesterday at 17:36
-any1??
-tine — Yesterday at 17:40
-Сега го видов ова
-Image
-s1123kdd24 — Yesterday at 18:23
-dete zlatno
-www — Yesterday at 19:13
-I sabajle nekoj ako ima porano pishete gi ako mozhe 🙂
-excalibur — Yesterday at 23:02
-Go imas celo resenie?
-diiaanaa — Yesterday at 23:17
-eve
-#include <iostream>
-#include <cstring>
-using namespace std;
-class Nedviznina {
-protected:
-    char *address;
-Expand
-message.txt
-3 KB
-ᚹᚺØᛒ14 — Yesterday at 23:39
-utre ako mozete pratete za labsot vie sto ste od sabajle
--Alex- — 00:30
-So kolku poeni se polozuva oop na prv kolok?
-filip11 — 00:31
-+- 35 ce kazele za sig
-Ivan — 00:43
-Zelena mi bese pvra zadaca na kolkvium ama dadea mi 25/40 poeni
-Imase li nekoja finta kaj zadacata zs mos zemale poeni ili
-﻿
+    ~MovieActor() {
+        delete [] name;
+    }
+    MovieActor& operator=(const MovieActor& other) {
+        if (this != &other) {
+            delete [] name;
+            copy(other);
+        }
+        return *this;
+    }
+    virtual double rating() {
+        return (average * 0.4) + (n * 0.2) + (earnings * 0.4);
+    }
+    virtual void print() {
+        cout << name << " - " << country << endl;
+        cout << "Average rating: " << average << endl;
+        cout << "Movies this year: " << n << endl;
+        cout << "Total earnings: " << earnings << endl;
+        cout << "Rating: " << rating() << endl;
+    }
+};
+class OscarWinner : public MovieActor {
+    double avgOscar;
+    int nOscar;
+    double totalEarnings;
+    public:
+    OscarWinner(MovieActor &actors, double avgOscar, int nOscar, double totalEarnings) : MovieActor(actors) {
+        this->avgOscar = avgOscar;
+        this->nOscar = nOscar;
+        this->totalEarnings = totalEarnings;
+    }
+    OscarWinner(char *name = " ", char *country = " ", double avg = 0, int n = 0, double earnings = 0,
+        double avgOsc = 0, int nOsc = 0, double totalEar = 0) : MovieActor(name, country, avg, n, earnings) {
+        this->avgOscar = avgOscar;
+        this->nOscar = nOscar;
+        this->totalEarnings = totalEarnings;
+    }
+    OscarWinner(const OscarWinner& other) : MovieActor(other) {
+        this->avgOscar = other.avgOscar;
+        this->nOscar = other.nOscar;
+        this->totalEarnings = other.totalEarnings;
+    }
+    OscarWinner& operator=(const OscarWinner& other) {
+        if (this != &other) {
+            MovieActor::operator=(other);
+            this->avgOscar = other.avgOscar;
+            this->nOscar = other.nOscar;
+            this->totalEarnings = other.totalEarnings;
+        }
+        return *this;
+    }
+    ~OscarWinner() {}
+    double oscarRating() {
+        return (avgOscar * 0.6) + (nOscar * 0.1) + (totalEarnings * 0.3);
+    }
+    double rating() {
+        return (MovieActor::rating() + oscarRating()) / 2;
+    }
+    void print() {
+        MovieActor::print();
+        cout << "Oscar Rating: " << oscarRating() << endl;
+        cout << "New Rating: " << rating() << endl;
+    }
+};
 int main() {
     char name[100];
     char country[41];
@@ -816,3 +333,8 @@ int main() {
 
     return 0;
 }
+Rating: 74.59
+Oscar Rating: 96.58
+New Rating: 74.59
+-------------------------
+
