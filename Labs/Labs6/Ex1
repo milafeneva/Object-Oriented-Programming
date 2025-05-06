@@ -48,3 +48,151 @@ Expected
 206 - 100 euros
 207 - 130 euros without balcony
 208 - 264 euros has a jacuzzi
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+class Room {
+protected:
+    int n;
+    int price;
+public:
+    Room(int n = 0, int price = 0) {
+        this->n = n;
+        this->price = price;
+    }
+    Room(const Room &r) {
+        this->n = r.n;
+        this->price = r.price;
+    }
+    Room &operator=(const Room &r) {
+        if (this != &r) {
+            this->n = r.n;
+            this->price = r.price;
+        }
+        return *this;
+    }
+    virtual int getPrice() const {
+        return this->price;
+    }
+    virtual void print() const {
+        cout << n << " - " << getPrice() << " euros" << endl;
+    }
+};
+class StandardRoom : public Room {
+private:
+    bool hasBalcony;
+public:
+    StandardRoom(int n = 0, int price = 0, bool hasBalcony = false) : Room(n, price) {
+        this->hasBalcony = hasBalcony;
+    }
+    int getPrice() {
+        if (hasBalcony) {
+            return price - (price * 5 / 100);
+        } else {
+            return price;
+        }
+    }
+    void print()  {
+        if (hasBalcony) {
+            cout << n << " - " << getPrice() << " euros has a balcony" << endl;
+        } else {
+            cout << n << " - " << getPrice() << " euros without balcony" << endl;
+        }
+    }
+};
+class LuxuryRoom : public Room {
+private:
+    bool hasJacuzzi;
+public:
+    LuxuryRoom(int n = 0, int price = 0, bool hasJacuzzi = false) : Room(n, price) {
+        this->hasJacuzzi = hasJacuzzi;
+    }
+    int getPrice() const {
+        if (hasJacuzzi) {
+            return price - (price * 20 / 100);
+        }
+        return price;
+    }
+    void print() {
+        if (hasJacuzzi) {
+            cout << n << " - " << getPrice() << " euros has a jacuzzi" << endl;
+        } else {
+            cout << n << " - " << getPrice() << " euros without jacuzzi" << endl;
+        }
+    }
+};
+
+int main() {
+    int testCase;
+    cin >> testCase;
+
+    if (testCase == 1) {
+        // Test Room class
+        int number, price;
+        cin >> number >> price;
+        Room r1(number, price);
+        Room r2 = r1;  // Copy constructor
+        Room r3;
+        r3 = r1;       // Assignment operator
+
+        r1.print();
+        r2.print();
+        r3.print();
+    }
+    else if (testCase == 2) {
+        // Test StandardRoom
+        int number, price;
+        bool hasBalcony;
+        cin >> number >> price >> hasBalcony;
+
+        StandardRoom sr(number, price, hasBalcony);
+        sr.print();
+    }
+    else if (testCase == 3) {
+        // Test LuxuryRoom
+        int number, price;
+        bool hasJacuzzi;
+        cin >> number >> price >> hasJacuzzi;
+
+        LuxuryRoom lr(number, price, hasJacuzzi);
+        lr.print();
+    }
+    else if (testCase == 4) {
+        // Polymorphism test
+        int n;
+        cin >> n;
+        Room* rooms[100];
+
+        for (int i = 0; i < n; ++i) {
+            string type;
+            cin >> type;
+
+            int number, price;
+            cin >> number >> price;
+
+            if (type == "Standard") {
+                bool hasBalcony;
+                cin >> hasBalcony;
+                rooms[i] = new StandardRoom(number, price, hasBalcony);
+            } else if (type == "Luxury") {
+                bool hasJacuzzi;
+                cin >> hasJacuzzi;
+                rooms[i] = new LuxuryRoom(number, price, hasJacuzzi);
+            } else {
+                rooms[i] = new Room(number, price);
+            }
+        }
+
+        for (int i = 0; i < n; ++i) {
+            rooms[i]->print();
+        }
+
+        for (int i = 0; i < n; ++i) {
+            delete rooms[i];
+        }
+    }
+
+    return 0;
+}
