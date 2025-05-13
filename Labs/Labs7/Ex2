@@ -29,8 +29,108 @@ bool isDangeours() – враќа true доколку e ураган или бр
 void displayWeatherInfo() – која печати информации за времето во следниот формат:
 The weather is windy, temperature: [temperature]°C, wind speed: [speed]km/h
 , not recommended to go out (се печати само доколку isDangeorus() враќа true) , there is a hurricane (се печати само ако е ураган)
-
-
 Да се напише глобалната функција displayDangerousWeather() која прима низа од покажувачи Weather и број на елемент, како резултат враќа нова низа која ги содржи само 
 објектите за кој isDangerous() враќа вредност true. 
 (Низата која ја враќа функцијата треба да биде динамички алоцирана и ги содржи соодветните елементи)
+#include <iostream>
+using namespace std;
+
+class Weather {
+protected:
+    float temperature;
+public:
+    Weather(float temp = 0) {
+        this->temperature = temp;
+    }
+    virtual bool isDangerous() = 0;
+    virtual void displayWeatherInfo() = 0;
+    virtual ~Weather() {} // Важно за избегнување memory leak
+};
+
+class SunnyWeather : public Weather {
+private:
+    float uvIndex;
+public:
+    SunnyWeather(float temp = 0, float uv = 0) : Weather(temp) {
+        this->uvIndex = uv;
+    }
+    bool isDangerous() override {
+        return uvIndex > 8;
+    }
+    void displayWeatherInfo() override {
+        cout << "The weather is sunny, temperature: " << temperature
+             << "°C, UV index: " << uvIndex;
+        if (isDangerous()) {
+            cout << ", not recommended to go out";
+        }
+        cout << endl;
+    }
+};
+
+class RainyWeather : public Weather {
+private:
+    float millimeter;
+    bool isStorm;
+public:
+    RainyWeather(float temp = 0, float mill = 0, bool storm = false)
+        : Weather(temp), millimeter(mill), isStorm(storm) {}
+
+    bool isDangerous() override {
+        return isStorm && millimeter > 10.0;
+    }
+
+    void displayWeatherInfo() override {
+        cout << "The weather is rainy, temperature: " << temperature
+             << "°C, amount of rain: " << millimeter << "mm";
+        if (isDangerous()) {
+            cout << ", not recommended to go out";
+        }
+        cout << endl;
+    }
+};
+
+class WindyWeather : public Weather {
+private:
+    float speed;
+    bool isHurricane;
+public:
+    WindyWeather(float temp = 0, float speed = 0, bool isH = false)
+        : Weather(temp), speed(speed), isHurricane(isH) {}
+
+    bool isDangerous() override {
+        return isHurricane || speed > 80.0;
+    }
+
+    void displayWeatherInfo() override {
+        cout << "The weather is windy, temperature: " << temperature
+             << "°C, wind speed: " << speed << "km/h";
+        if (isDangerous()) {
+            cout << ", not recommended to go out";
+            if (isHurricane) {
+                cout << ", there is a hurricane";
+            }
+        }
+        cout << endl;
+    }
+};
+Weather** displayDangerousWeather(Weather* weathers[], int n, int& dangerousCount) {
+    dangerousCount = 0;
+
+    for (int i = 0; i < n; ++i) {
+        if (weathers[i]->isDangerous()) {
+            ++dangerousCount;
+        }
+    }
+
+    Weather** dangerousList = new Weather*[dangerousCount];
+    int index = 0;
+
+    for (int i = 0; i < n; ++i) {
+        if (weathers[i]->isDangerous()) {
+            dangerousList[index++] = weathers[i];
+        }
+    }
+
+    return dangerousList;
+}
+}
