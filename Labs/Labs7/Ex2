@@ -1,0 +1,36 @@
+Да се креира апстрактна класа Weather во кој се чува податок за температурата. Класата треба да ги содржи следните два виртуелни методи:
+
+bool isDangeours() – кажува дали е ризично да се излегува надвор
+void displayWeatherInfo() – печати информации за времето
+Од оваа класа треба да се изведат класите SunnyWeather, RainyWeather и WindyWeather.
+
+Во класата SunnyWeather дополнително се чуваат информации за:
+УВ индексот (uv) – децимален број
+Да се преоптоварат функции:
+bool isDangeours() – враќа true доколку ув индексот е поголем од 8:
+void displayWeatherInfo() – која печати информации за времето во следниот формат:
+The weather is sunny, temperature: [temperature]°C, UV index: [uv]
+, not recommended to go out (се печати само доколку isDangeorus() враќа true)
+
+Во класата RainyWeather дополнително се чуваат информации за:
+Количината на дожд (millimeter) – децимален број
+Дали е невреме (isStortm) – булеан
+Да се преоптоварат функции:
+bool isDangeours() – враќа true доколку e невреме и количината е поголема од 10 милиметри
+void displayWeatherInfo() – која печати информации за времето во следниот формат:
+The weather is rainy, temperature: [temperature]°C, amount of rain: [millimeter]mm
+, not recommended to go out (се печати само доколку isDangeorus() враќа true)
+
+Во класата WindyWeather дополнително се чуваат информации за:
+Брзина на ветер (speed) – децимален број
+Дали е ураган (isHurricane) – булеан
+Да се преоптоварат функции:
+bool isDangeours() – враќа true доколку e ураган или брзината на ветеро е поглема од 80km/h
+void displayWeatherInfo() – која печати информации за времето во следниот формат:
+The weather is windy, temperature: [temperature]°C, wind speed: [speed]km/h
+, not recommended to go out (се печати само доколку isDangeorus() враќа true) , there is a hurricane (се печати само ако е ураган)
+
+
+Да се напише глобалната функција displayDangerousWeather() која прима низа од покажувачи Weather и број на елемент, како резултат враќа нова низа која ги содржи само 
+објектите за кој isDangerous() враќа вредност true. 
+(Низата која ја враќа функцијата треба да биде динамички алоцирана и ги содржи соодветните елементи)
