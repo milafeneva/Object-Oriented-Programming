@@ -1,0 +1,144 @@
+Креирај апстрактна класа CelestialBody (небесно тело) што ќе ја користиме за опишување на планети и џуџести планети. Kласата треба да ги содржи следните информации:
+
+име на телото - (динамички алоцирана низа од знаци)
+маса во земјини маси - (реален број)
+оддалеченост од Сонцето во астрономски единици - (реален број)
+Класата треба да ги има следните два виртуелни методи:
+
+calculateGravity - за пресметување на гравитација.
+printInfo - принтање
+Од оваа класа да се изведат класите Planet и DwarfPlanet . Во класата Planet дополнително се чуваат следните информации:
+
+број на месечини (цел број)
+За секоја џуџеста планета (DwarfPlanet) дополнително се чуваат следните информации:
+дали е во Кајперовиот појас(bool вредност)
+За секоја планета (Planet) потребно е да се обезбеди метод (calculateGravity) за пресметување на гравитацијата на планетата според следново:
+
+Гравитација = маса / (растојание²). Доколку има повеќе од 2 месечини, гравитацијата се зголемува за 10%.
+
+За секоја џуџеста планета (DwarfPlanet) потребно е да се обезбеди метод (calculateGravity) за пресметување на гравитација според следново:
+
+Гравитација = маса / (растојание²).Доколку џуџестата планета не е во Кајперовиот појас тогаш гравитацијата се намалува за 20%.
+
+Функцијата за печатење на податоци за секое небесно тело треба да биде во следниов формат:
+
+За планета (Planet):
+
+[име]-[број на месечини] - gravity impact: [вредност]
+За џуџеста планета (DwarfPlanet):
+
+***доколку е во Кајперов појас се печати in Kuiper Belt а ако не е out of Kuiper Belt.
+
+[име]-[in/out of Kuiper Belt] - gravity impact: [вредност]
+Да се дефинира глобална функција float mostGravitationalBody(CelestialBody* bodies[], int n) што на влез прима низа од покажувачи кон објекти од класата
+CelestialBody и нивниот број, а како резултат ја враќа гравитацијата на небесното тело со најголема гравитација
+#include <iostream>
+#include <limits>
+#include <string.h>
+using namespace std;
+
+class CelestialBody {
+protected:
+    char *name;
+    float mass;
+    float distance;
+    void copy(const CelestialBody&other) {
+        this->name = new char[strlen(other.name)+1];
+        strcpy(this->name, other.name);
+        this->mass = other.mass;
+        this->distance = other.distance;
+    }
+public:
+    CelestialBody(const char *name = " ", float mass = 0, float distance = 0) {
+        this->name = new char[strlen(name) + 1];
+        strcpy(this->name, name);
+        this->mass = mass;
+        this->distance = distance;
+    }
+    ~CelestialBody() {
+        delete[] name;
+    }
+    CelestialBody(CelestialBody &other) {
+        copy(other);
+    }
+    CelestialBody &operator=(CelestialBody &other) {
+        if (this != &other) {
+            delete[] name;
+            copy(other);
+        }
+        return *this;
+    }
+    virtual float calculateGravity() = 0;
+    virtual void printInfo() = 0;
+};
+class Planet : public CelestialBody {
+private:
+    int n;
+public:
+    Planet(const char *name = " ", float mass = 0, float distance = 0, int n = 0) : CelestialBody(name, mass, distance) {
+        this->n = n;
+    }
+    float calculateGravity() override {
+        float gravitation = mass/distance*distance;
+        if (n >= 2) {
+            return gravitation * 1.1;
+        }
+        return gravitation;
+    }
+    void printInfo() override {
+        cout << name << " - " << n << "- gravity impact: " << calculateGravity() << endl;
+    }
+};
+class DwarfPlanet : public CelestialBody {
+private:
+    bool kajperov;
+public:
+    DwarfPlanet(const char *name = " ", float mass = 0, float distance = 0, bool kajp = false) : CelestialBody(name, mass, distance) {
+        this->kajperov = kajp;
+    }
+    float calculateGravity() override {
+        float grav = mass / distance*distance;
+        if (!kajperov) {
+            return grav * 0.8;
+        }
+        return grav;
+    }
+    void printInfo() override {
+        cout << name << " - ";
+        if (kajperov) {
+            cout << " in Kuiper Belt ";
+        } else {
+            cout << " out of Kuiper Belt ";
+        }
+        cout << "- gravity impact: " << calculateGravity() << endl;
+    }
+};
+float mostGravitationalBody(CelestialBody* bodies[], int n) {
+    float max = bodies[0]->calculateGravity();
+    for (int i = 0; i < n; i++) {
+        if (bodies[i]->calculateGravity() > max) {
+            max = bodies[i]->calculateGravity();
+        }
+    }
+    return max;
+}
+int main() {
+    CelestialBody* bodies[4];
+    bodies[0] = new Planet("Earth", 1.0f, 1.0f, 1);
+    bodies[1] = new Planet("Jupiter", 317.8f, 5.2f, 79);
+    bodies[2] = new DwarfPlanet("Pluto", 0.0022f, 39.5f, true);
+    bodies[3] = new DwarfPlanet("Ceres", 0.00015f, 2.77f, false);
+
+    for (int i = 0; i < 4; ++i) {
+        bodies[i]->printInfo();
+    }
+
+    cout << "Most gravitational body impact: " << mostGravitationalBody(bodies, 4) << endl;
+
+    // Ослободување на меморија
+    for (int i = 0; i < 4; ++i) {
+        delete bodies[i];
+    }
+
+    return 0;
+}
