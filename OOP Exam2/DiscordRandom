@@ -1,0 +1,214 @@
+Да се креира класа VehicleRegistration во кој се чува податоци за едно возило. Класата треба да ги содржи следните аргументи:
+
+string registration_number;
+string manufacture_date;
+int mileage;
+int engine_power;
+int vehicle_age;
+double emission_level;
+Потребно е да се имплементираат:
+
+Default конструктор
+Конструктор со параметри
+Copy конструктор
+Оператор =
+Оператор за читање istream>>
+Оператор за печатење ostream<< во следниот формат
+Vehicle Reg: <registration_number> <manufacture_date> | Mileage <mileage>km Power <engine_power>hp Age <vehicle_age>y Emission <emission_level>g/km
+
+Функцијата string VehicleCategory() која ги категоризира возилата во три категории: Restricted, Limited и Approved:
+Restricted - mileage > 250000 или vehicle_age > 20 или emission_level > 120.0 или engine_power < 60
+Limited - mileage > 150000 или vehicle_age > 15 или emission_level > 90.0 или engine_power < 80
+Approved - сите останати
+Да се напише глобалната функција FilterByVehicleCategory() која прима низа од VehicleRegistration, број на елементи и string категорија. 
+Како резултат функцијата враќа нова динамички алоцирана низа која ги содржи само возилата од дадената категорија.
+
+Податоците се дадени во датотеката text.txt во форматот: прв ред - број на test case, втор ред - број на елементи, секој следен ред содржи податоци за едно возило (за читање на податоци за едно возило користете го istream операторот од класата).
+
+На почетокот во main() каде што има TODO да се вчитаат потребните податоци од датотека.
+
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <cctype>
+using namespace std;
+
+class VehicleRegistration {
+private:
+    string registration_number;
+    string manufacture_date;
+    int mileage;
+    int engine_power;
+    int vehicle_age;
+    double emission_level;
+
+    void copy(const VehicleRegistration&other) {
+        registration_number = other.registration_number;
+        manufacture_date = other.manufacture_date;
+        mileage = other.mileage;
+        engine_power = other.engine_power;
+        vehicle_age = other.vehicle_age;
+        emission_level = other.emission_level;
+    }
+
+public:
+    VehicleRegistration(string regNum = "", string date = "", int miles = 0, int engPow = 0,
+        int age = 0, double level = 0) {
+        registration_number = regNum;
+        manufacture_date = date;
+        mileage = miles;
+        engine_power = engPow;
+        vehicle_age = age;
+        emission_level = level;
+    }
+    VehicleRegistration(const VehicleRegistration &other) {
+        copy(other);
+    }
+    VehicleRegistration&operator=(VehicleRegistration&vehicle) {
+        if (this != &vehicle) {
+            copy(vehicle);
+        }
+        return *this;
+    }
+    friend istream&operator>>(istream &is, VehicleRegistration &v) {
+        is >> v.registration_number >> v.manufacture_date >> v.mileage >> v.engine_power >>
+        v.vehicle_age >> v.emission_level;
+        return is;
+    }
+    friend ostream&operator<<(ostream& os, VehicleRegistration &v) {
+        os << "Vehicle Reg: " << v.registration_number << " " << v.manufacture_date;
+        os << " | Mileage " << v.mileage << "km Power " << v.engine_power << "hp";
+        os << " Age " << v.vehicle_age << " Emission " << v.emission_level << "g/km" << endl;
+        return os;
+    }
+    string VehicleCategory() {
+        if (mileage > 250000 || vehicle_age > 20 || emission_level > 120.0 || engine_power < 60) {
+            return "Restricted";
+        }
+        else if (mileage > 150000 || vehicle_age > 15 || emission_level > 90.0 || engine_power < 80) {
+            return "Limited";
+        }
+        else {
+            return "Approved";
+        }
+    }
+    bool operator==(string category) {
+        return this->VehicleCategory() == category;
+    }
+};
+VehicleRegistration* FilterByVehicleCategory(VehicleRegistration *vehicles, int n, string category) {
+    int filteredSize = 0;
+    for (int i = 0; i < n; i++) {
+        if (vehicles[i].VehicleCategory() == category) {
+            filteredSize++;
+        }
+    }
+    VehicleRegistration *filtered = new VehicleRegistration[filteredSize];
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        if (vehicles[i].VehicleCategory() == category) {
+            filtered[count] = vehicles[i];
+            count++;
+        }
+    }
+    return filtered;
+}
+
+
+void writeToFile() {
+    ofstream file("text.txt");
+    char c;
+    while ((c = cin.get()) != '#') {
+        file.put(c);
+    }
+    file.close();
+}
+
+int main() {
+    writeToFile();
+
+    ifstream fin("text.txt");
+    if (!fin) {
+        std::cerr << "Cannot open file\n";
+        return 1;
+    }
+
+    // TODO: Вчитајте податоци од датотека (број на тест примери (testCase), број на записи (n) и податоци)
+
+    int testCase, n;
+    fin >> testCase;
+    fin >> n;
+
+    // Остатокот од кодот останува непроменет
+
+    VehicleRegistration *records = new VehicleRegistration[n];
+    for (int i = 0; i < n; i++) {
+        fin >> records[i];
+    }
+    fin.close();
+    if (testCase == 1) {
+        cout << "===== Testing Constructor, Istream Operator & Ostream Operator =====" << endl;
+        for (int i = 0; i < n; i++) {
+            cout << records[i];
+        }
+    }
+
+    if (testCase == 2) {
+        cout << "===== Testing VehicleCategory Function =====" << endl;
+        for (int i = 0; i < n; i++) {
+            cout << records[i].VehicleCategory() << endl;
+        }
+    }
+
+    if (testCase == 3) {
+        cout << "===== Testing FilterByVehicleCategory Global Function =====" << endl;
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (records[i].VehicleCategory() == "Approved") {
+                count++;
+            }
+        }
+        VehicleRegistration *filtered = FilterByVehicleCategory(records, n, "Approved");
+        cout << "Approved Vehicles:" << endl;
+        for (int i = 0; i < count; i++) {
+            cout << filtered[i];
+        }
+        delete[] filtered;
+    }
+
+    if (testCase == 4) {
+        cout << "===== Testing FilterByVehicleCategory Global Function =====" << endl;
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (records[i].VehicleCategory() == "Limited") {
+                count++;
+            }
+        }
+        VehicleRegistration *filtered = FilterByVehicleCategory(records, n, "Limited");
+        cout << "Limited Vehicles:" << endl;
+        for (int i = 0; i < count; i++) {
+            cout << filtered[i];
+        }
+        delete[] filtered;
+    }
+
+    if (testCase == 5) {
+        cout << "===== Testing FilterByVehicleCategory Global Function =====" << endl;
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (records[i].VehicleCategory() == "Restricted") {
+                count++;
+            }
+        }
+        VehicleRegistration *filtered = FilterByVehicleCategory(records, n, "Restricted");
+        cout << "Restricted Vehicles:" << endl;
+        for (int i = 0; i < count; i++) {
+            cout << filtered[i];
+        }
+        delete[] filtered;
+    }
+
+    delete[] records;
+    return 0;
+}
+
