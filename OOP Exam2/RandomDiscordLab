@@ -1,0 +1,183 @@
+Да се дефинира класа AIModel која ќе претставува еден AI модел. Треба да ги содржи следните полиња:
+
+brand - компанија-производител на моделот,
+name - име на моделот и       
+version - верзија на моделот.
+За класата треба да се дефинира параметризиран конструктор и print() метод.
+
+Да се дефинира класа AIConfiguration, која ќе ги претставува конфигурациите на AI модел. Таа треба да ги содржи следните полиња:
+
+parameters - број на влезни параметри на моделот,
+epochs - број на епохи на кои е трениран моделот,
+type - податок од тип AIModelType (GPT, VISION, CLASSIFIER, EMBEDDING)
+ За класата треба да се дефинира параметризиран конструктор и print() метод. Во параметризираниот конструктор треба да се провери валидноста на бројот на параметри и типот,
+и доколку се наиде на невалиден податок да се фрли соодветен исклучок (треба да ги креирате класите InvalidNumberOfParametersException и InvalidModelTypeException, соодветно).
+
+За бројот на параметри велиме дека е невалиден доколку е број помал од 0.
+За типот на моделот велиме дека е невалиден доколку не е дефиниран во енумерацијата.
+
+Напомена: прво се проверува бројот на параметри, па потоа типот на модел. Исклучоците треба да се фатат на означеното место во main функцијата.*/
+
+
+#include <iostream>
+#include <string>
+#include <unordered_map>
+using namespace std;
+
+
+class InvalidNumberOfParametersException {
+public:
+    InvalidNumberOfParametersException() {
+
+    }
+    void message() {
+        cout << "Invalid number of parameters!" << endl;
+    }
+
+};
+class InvalidModelTypeException {
+public:
+    InvalidModelTypeException() {
+
+    }
+    void message() {
+        cout << "Invalid model type!" << endl;
+    }
+
+};
+
+
+class AIModel {
+private:
+    string brand;
+    string name;
+    string version;
+public:
+    AIModel(string brand = "", string name = "", string version = "") {
+        this->brand = brand;
+        this->name = name;
+        this->version = version;
+    }
+    void print() {
+        cout << brand << " " << name << " " << version << endl;
+    }
+};
+enum AIModelType {
+    GPT,
+    VISION,
+    CLASSIFIER,
+    EMBEDDING
+};
+class AIConfiguration {
+private:
+    int parameters;
+    int epochs;
+    AIModelType type;
+public:
+    AIConfiguration(int parameters = 0, int epochs = 0, AIModelType type = GPT) {
+        if (parameters < 0) {
+            throw InvalidNumberOfParametersException();
+        }
+        if (type != GPT && type != VISION && type != CLASSIFIER && type != EMBEDDING) {
+            throw InvalidModelTypeException();
+        }
+        this->parameters = parameters;
+        this->epochs = epochs;
+        this->type = type;
+    }
+    void print() {
+
+    }
+};
+AIModelType getStringMapping(string &typeStr) {
+    if (typeStr == "GPT") return GPT;
+    else if (typeStr == "VISION") return VISION;
+    else if (typeStr == "CLASSIFIER") return CLASSIFIER;
+    else if (typeStr == "EMBEDDING") return EMBEDDING;
+    else throw InvalidModelTypeException();
+}
+int main()
+{
+    int tc;
+    cin >> tc;
+    if (tc == 1)
+    {
+        string brand, name, version;
+        cout << "Testing AI Model Creation:";
+        cin >> brand >> name >> version;
+        AIModel model(brand, name, version);
+        cout << " PASSED" << endl;
+    }
+    if (tc == 2)
+    {
+        AIModel model("OpenAI", "GPT-3", "v1.0");
+        cout << "Testing Print Method for AI Model:" << endl;
+        model.print();
+    }
+    if (tc == 3)
+    {
+        cout << "Testing AI Configuration Creation:";
+        int parameters, epochs;
+        string typeStr;
+        cin >> parameters >> epochs >> typeStr;
+        try {
+            AIModelType type = getStringMapping(typeStr);
+            AIConfiguration config(parameters, epochs, type);
+            cout << " PASSED" << endl;
+        } catch (InvalidModelTypeException m) {
+            m.message();
+        } catch (InvalidNumberOfParametersException n) {
+            n.message();
+        }
+    }
+    if (tc == 4)
+    {
+        cout << "Testing Print Method for AI Configuration:" << endl;
+        int parameters = 10, epochs = 5;
+        string typeStr = "GPT";
+        try {
+            AIModelType type = getStringMapping(typeStr);
+            AIConfiguration config(parameters, epochs, type);
+            config.print();
+        }catch (InvalidModelTypeException a) {
+            a.message();
+        } catch (InvalidNumberOfParametersException s) {
+            s.message();
+        }
+
+    }
+
+    if (tc == 5)
+    {
+        cout << "Testing Invalid Number of Parameters Exception:" << endl;
+        int parameters, epochs;
+        string typeStr = "GPT";
+        cin >> parameters >> epochs;
+        try {
+            AIModelType type = getStringMapping(typeStr);
+            AIConfiguration config(parameters, epochs, type);
+            config.print();
+        } catch (InvalidNumberOfParametersException d) {
+            d.message();
+        } catch (InvalidModelTypeException f) {
+            f.message();
+        }
+    }
+    if (tc == 6)
+    {
+        cout << "Testing Invalid Model Type Exception:" << endl;
+        int parameters = 10, epochs = 5;
+        string typeStr;
+        cin >> typeStr;
+        try {
+            AIModelType type = getStringMapping(typeStr);
+            AIConfiguration config(parameters, epochs, type);
+            config.print();
+        } catch (InvalidNumberOfParametersException g) {
+            g.message();
+        } catch (InvalidModelTypeException k) {
+            k.message();
+        }
+    }
+    return 0;
+}
